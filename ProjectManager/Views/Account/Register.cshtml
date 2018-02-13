@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="login-form">
+    <div class="login-content">
+        @using (Ajax.BeginForm("Register", "Account", new AjaxOptions() { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "main-content" }, new { @id = "form_register", @novalidate = "novalidate" }))
+        {
+            <div class="form-login-error">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-register-success">
+                @Html.ValidationSummary(true, "")
+            </div>
+                <div class="form-steps" style="height: 304px;">
+                    <div class="step current" id="step-1" style="">
+                        <div class="form-group" style="">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="entypo-user-add"></i>
+                                </div>
+                                <input type="text" class="form-control" name="Login" id="Login" placeholder="Login" data-mask="[a-zA-Z0-1\.]+" data-is-regex="true" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group" style="">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="entypo-mail"></i>
+                                </div>
+                                <input type="email" class="form-control" name="Email" id="Email" data-mask="Email" placeholder="E-mail" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group" style="">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="entypo-lock"></i>
+                                </div>
+                                <input type="password" class="form-control" name="Password" id="Password" placeholder="Password" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group" style="">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="entypo-lock"></i>
+                                </div>
+                                <input type="password" class="form-control" name="PasswordConfirm" id="PasswordConfirm" placeholder="Confirm Password" autocomplete="off" data-match="#Password">
+                            </div>
+                        </div>
+                        <div class="form-group" style="">
+                            <button type="submit" class="btn btn-primary btn-block btn-login">
+                                Registration
+                            </button>
+                        </div>
+                    </div>
+                </div>
+        }
+    </div>
+</div>

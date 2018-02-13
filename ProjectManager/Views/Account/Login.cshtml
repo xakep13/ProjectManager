@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="login-container center-block">
+    <div class="login-form" id="login_form">
+        <div class="login-content">
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "form_login", @novalidate = "novalidate", @class = "form_horizontal" }))
+            {
+                <div class="form-login-error">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="entypo-user"></i>
+                        </div>
+                        <input type="text" class="form-control" name="Login" id="Login" placeholder="Login" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="entypo-key"></i>
+                        </div>
+                        <input type="password" class="form-control" name="Password" id="Password" placeholder="Password" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label><input type="checkbox" id="RememberMe" name="RememberMe" value="true" data-val="true" /> Remember me.</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block btn-login">
+                        <i class="entypo-login"></i>
+                        Login In
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
