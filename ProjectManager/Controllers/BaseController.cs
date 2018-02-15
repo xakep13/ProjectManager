@@ -16,13 +16,14 @@ namespace ProjectManager.Controllers
         protected IBoardService BoardService;
         protected ITaskListService TaskListService;
         protected ICardService CardService;
+        protected IUserService UserService;
 
-        public BaseController(IBoardService board, ITaskListService taskList, ICardService card)
+        public BaseController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card)
         {
             BoardService = board;
             TaskListService = taskList;
             CardService = card;
-
+            UserService = user;
             mapper = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<BoardDTO, BoardViewModel>();
