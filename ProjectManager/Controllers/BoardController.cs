@@ -5,24 +5,26 @@ using System.Web;
 using System.Web.Mvc;
 using ProjectManager.BLL.Interfaces;
 using ProjectManager.BLL.DTO;
-using ProjectManager.Models;
+using Microsoft.AspNet.Identity;
 
 namespace ProjectManager.Controllers
 {
-    [Authorize]
     public class BoardController : BaseController
     {
-        public BoardController(IUserService user,IBoardService board, ITaskListService taskList, ICardService card ) : base(user, board, taskList, card) { }
-        
+        public BoardController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card){        }
 
-        public ActionResult Index()
+        [HttpPost]
+        public ActionResult Create(string name)
         {
-            var map = mapper.CreateMapper();
-            string s = User.Identity.Name;
-            IEnumerable<BoardDTO> boards = BoardService.GetAll();
-            IEnumerable<BoardViewModel> boardsView = map.Map<IEnumerable<BoardViewModel>>(boards);
+            string id = User.Identity.GetUserId();
+            UserDTO userDTO = UserService.GetById(id);
 
-            return View((object)s);
+            BoardDTO boardDTO = new BoardDTO() { Name = name };
+            boardDTO.Users.Add(userDTO);
+            int i = BoardService.Create(boardDTO);
+
+            if (i != -1) return null;
+            else         return null;
         }
     }
 }

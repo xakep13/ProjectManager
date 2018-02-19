@@ -1,0 +1,43 @@
+﻿@using ProjectManager.Models
+@model List<BoardViewModel>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <table>
+    @foreach (BoardViewModel b in Model)
+    {
+        <tr>
+            <td>@b.Id</td>
+            <td>@b.Name</td>
+            <tr>
+                @foreach (TaskListViewModel t in b.TaskLists)
+                {
+                    <td>@t.Id</td>
+                    <td>@t.Name</td>
+                    <tr>
+                            @foreach (CardViewModel c in t.Cards)
+                            {
+                                <td>@c.Id</td>
+                                <td>@c.Name</td>
+                            }
+                    </tr>
+                }
+           </tr>
+       </tr>  
+        
+    }
+    </table>
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</body>
+</html>

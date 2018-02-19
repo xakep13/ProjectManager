@@ -20,20 +20,24 @@ namespace ProjectManager.Controllers
 
         public BaseController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card)
         {
-            BoardService = board;
             TaskListService = taskList;
+            BoardService = board;
             CardService = card;
             UserService = user;
+
             mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<BoardDTO, BoardViewModel>();
-                cfg.CreateMap<BoardViewModel, BoardDTO>();
-
                 cfg.CreateMap<TaskListDTO, TaskListViewModel>();
                 cfg.CreateMap<TaskListViewModel, TaskListDTO>();
 
+                cfg.CreateMap<BoardDTO, BoardViewModel>();
+                cfg.CreateMap<BoardViewModel, BoardDTO>();
+
                 cfg.CreateMap<CardDTO, CardViewModel>();
                 cfg.CreateMap<CardViewModel, CardDTO>();
+
+                cfg.CreateMap<UserDTO, UserViewModel>();
+               
             });
         }
     }

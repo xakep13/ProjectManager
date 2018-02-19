@@ -72,7 +72,7 @@ namespace ProjectManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(UserRegistrationViewModel model)
         {
-            //await SetInitialDataAsync();
+            await SetInitialDataAsync();
             if (ModelState.IsValid)
             {
                 UserDTO userDto = new UserDTO
