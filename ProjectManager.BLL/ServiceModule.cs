@@ -5,6 +5,9 @@ namespace ProjectManager.BLL
 {
     public class ServiceModule : NinjectModule
     {
-        public override void Load() => Bind<IUnitOfWork>().To<UnitOfWork>();
+        public override void Load()
+        {
+            Bind<IUnitOfWork>().To<UnitOfWork>();
+        }
     }
 }

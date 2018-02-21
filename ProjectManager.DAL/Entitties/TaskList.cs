@@ -12,7 +12,7 @@ namespace ProjectManager.DAL.Entitties
         public int BoardId { get; set; }
         public Board Board { get; set; }
 
-        public ICollection<Card> Cards { get; set; }
+        public List<Card> Cards { get; set; }
 
         public TaskList()
         {

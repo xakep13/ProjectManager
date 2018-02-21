@@ -6,13 +6,13 @@ namespace ProjectManager.DAL.Interfaces
 {
     public interface IEntityRepository<T> where T : class
     {
-        T Get(int Id);
-        IQueryable<T> GetAll();
-        IQueryable<T> Find(Func<T, bool> predicate);
-        void Create(T item);
-        void Update(T item);
-        void Delete(int Id);
-        bool IfExist(int Id);
-        IEnumerable<object> Select(Func<T, object> predicate);
+        IEnumerable<object>     Select(Func<T, object> predicate);
+        IQueryable<T>           Find(Func<T, bool> predicate);
+        IQueryable<T>           GetAll();
+        void                    Create(T item);
+        void                    Update(T item);
+        void                    Delete(int Id);
+        bool                    IfExist(int Id);
+        T                       Get(int Id);
     }
 }

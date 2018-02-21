@@ -21,7 +21,12 @@ namespace ProjectManager.BLL.Service
 
             mapper = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<User, UserDTO>();
+                cfg.CreateMap<ClientProfile, UserDTO>()
+                    .ForMember(x => x.Email, y => y.MapFrom(z => z.ApplicationUser.Email))
+                    .ForMember(x => x.Login, y => y.MapFrom(z => z.ApplicationUser.UserName))
+                    .ForMember(x => x.Role, y => y.MapFrom(z => z.ApplicationUser.Roles.FirstOrDefault()))
+                    .ForMember(x => x.Boards, y => y.MapFrom(z => z.Boards));
+                
                 cfg.CreateMap<Board, BoardDTO>();
                 cfg.CreateMap<BoardDTO, Board>();
                 cfg.CreateMap<Card, CardDTO>();

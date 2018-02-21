@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using ProjectManager.DAL.UnitOfWork;
 using ProjectManager.BLL.DTO;
 using ProjectManager.BLL.Interfaces;
+using Microsoft.AspNet.Identity;
+using ProjectManager.DAL.Entitties;
 
 namespace ProjectManager.BLL.Service
 {
@@ -10,12 +12,75 @@ namespace ProjectManager.BLL.Service
     {
         public BoardService(IUnitOfWork uow) : base(uow) { }
 
-        public IEnumerable<BoardDTO> GetAll()
+        public int Create(BoardDTO data)
         {
-            var mapping = mapper.CreateMapper();
-            return mapping.Map<IEnumerable<BoardDTO>>(Database.Boards.GetAll());
+            if (data != null)
+            {
+                var map = mapper.CreateMapper();
+                Board board = map.Map<Board>(data);
+                Database.Boards.Create(board);
+                Database.Save();
+
+                return board.Id;
+            }
+            else return -1;
         }
 
+        public int Update(BoardDTO data)
+        {
+            if (data != null)
+            {
+                var map = mapper.CreateMapper();
+                Board board = map.Map<Board>(data);
+                Database.Boards.Update(board);
+                Database.Save();
+                return board.Id;
+            }
+            else  return -1; 
+        }
 
+        public BoardDTO Get(int id)
+        {
+            var map = mapper.CreateMapper();
+            return map.Map<BoardDTO>(Database.Boards.Get(id));
+        }
+
+        public IEnumerable<BoardDTO> GetAll(string id)
+        {
+            ClientProfile user = Database.Users.GetById(id);
+
+
+            var mapping = mapper.CreateMapper();
+            return mapping.Map<IEnumerable<BoardDTO>>(user.Boards);
+        }
+
+        public int Delete(BoardDTO data)
+        {
+            if (data != null)
+            {
+                var map = mapper.CreateMapper();
+                Board board = map.Map<Board>(data);
+
+                foreach (ClientProfile user in board.Users)
+                    user.Boards.Remove(board);
+
+                foreach (TaskList taskList in board.TaskLists)
+                {
+                    foreach (Card card in taskList.Cards)
+                        Database.Cards.Delete(card.Id);
+                    Database.TaskLists.Delete(taskList.Id);
+                }
+
+                Database.Boards.Delete(board.Id);
+                Database.Save();
+                return 0;
+            }
+            else return -1;
+        }
+
+        public IEnumerable<BoardDTO> GetAll(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

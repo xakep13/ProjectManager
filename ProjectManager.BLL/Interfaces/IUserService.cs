@@ -1,17 +1,19 @@
-﻿using ProjectManager.BLL.DTO;
+﻿using ProjectManager.BLL.BusinessModels;
+using ProjectManager.BLL.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ProjectManager.BLL.Interfaces
 {
-    public interface IUserService
+    public interface IUserService : IDisposable
     {
-        bool Create(UserDTO item);
-        UserDTO Login(string email, string password);
-        UserDTO GetByName(string Name);
-        UserDTO GetById(int Id);
+        Task<OperationDetails>      Create(UserDTO userDto);
+        Task<ClaimsIdentity>        Authenticate(UserDTO userDto);
+        Task                        SetInitialData(UserDTO adminDto, List<string> roles);
+        UserDTO                     GetById(string id);
     }
 }

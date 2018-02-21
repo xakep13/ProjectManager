@@ -1,6 +1,4 @@
 ﻿using ProjectManager.BLL.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +6,10 @@ using ProjectManager.BLL.DTO;
 using ProjectManager.DAL.UnitOfWork;
 using ProjectManager.DAL.Entitties;
 using ProjectManager.BLL.BusinessModels;
+using System.Security.Claims;
+using Microsoft.AspNet.Identity;
+using System.Collections.Generic;
+using System;
 
 namespace ProjectManager.BLL.Service
 {
@@ -15,47 +17,96 @@ namespace ProjectManager.BLL.Service
     {
         public UserService(IUnitOfWork uow) : base(uow) { }
 
-        public bool Create(UserDTO item)
+        public async Task<OperationDetails> Create(UserDTO userDto)
         {
-            User user = Database.Users.Find(u => u.Email == item.Email || u.Login == item.Login).FirstOrDefault();
-
+           
+            ApplicationUser user = await Database.UserManager.FindByEmailAsync(userDto.Email);
             if (user == null)
             {
-                string hashPassword = Hashing.GetHashString(item.Password);
-                User newUser = new User()
-                {
-                    Email = item.Email,
-                    Login = item.Login,
-                    Password = hashPassword
-                };
-                Database.Users.Create(newUser);
+                user = new ApplicationUser { Email = userDto.Email, UserName = userDto.Login };
+                var result = await Database.UserManager.CreateAsync(user, userDto.Password);
+                if (result.Errors.Count() > 0) return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
+               
+                await Database.UserManager.AddToRoleAsync(user.Id, userDto.Role);
+
+                Board board = new Board { Name = "Welcome" };
+                ClientProfile clientProfile = new ClientProfile { Id = user.Id  };
+
+                board.Users.Add(clientProfile);
+
+                TaskList taskList1 = new TaskList() {  Name = "Зробити", Board = board };
+                TaskList taskList2 = new TaskList() {  Name = "РОбиться", Board = board };
+                TaskList taskList3 = new TaskList() {  Name = "Готово", Board = board };
+
+                board.TaskLists.AddRange(new List<TaskList> { taskList1, taskList2, taskList3 });
+
+                Card card1 = new Card() {  Name = "Tet_card", Description = "new test card 1", TaskList = taskList1 };
+                Card card2 = new Card() {  Name = "Tet_card", Description = "new test card 2", TaskList = taskList1 };
+                Card card3 = new Card() {  Name = "Tet_card", Description = "new test card 3", TaskList = taskList2 };
+                Card card4 = new Card() {  Name = "Tet_card", Description = "new test card 4", TaskList = taskList3 };
+
+                taskList1.Cards.AddRange(new List<Card> { card1, card2 });
+                taskList2.Cards.Add(card3);
+                taskList3.Cards.Add(card4);
+
+                Database.Users.Create(clientProfile);
+                Database.Boards.Create(board);
+                Database.TaskLists.Create(taskList1);
+                Database.TaskLists.Create(taskList2);
+                Database.TaskLists.Create(taskList3);
+                Database.Cards.Create(card1);
+                Database.Cards.Create(card2);
+                Database.Cards.Create(card3);
+                Database.Cards.Create(card4);
                 Database.Save();
-                return true;
+
+                return new OperationDetails(true, "Регистрация успешно пройдена", "");
             }
-            else  return false; 
+            else  return new OperationDetails(false, "Пользователь с таким логином уже существует", "Login");
+            
         }
 
-        public UserDTO Login(string login, string password)
+        public async Task<ClaimsIdentity> Authenticate(UserDTO userDto)
         {
-            var map = mapper.CreateMapper();
-            User user = Database.Users.Find(u => u.Login == login && u.Password == Hashing.GetHashString(password)).FirstOrDefault();
-            if (user != null)
+            ClaimsIdentity claim = null;
+           
+            ApplicationUser user = await Database.UserManager.FindAsync(userDto.Login, userDto.Password);
+
+            if (user != null) claim = await Database.UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            return claim;
+        }
+
+        public async Task SetInitialData(UserDTO adminDto, List<string> roles)
+        {
+            await AddRoleAsync(roles);
+            await Create(adminDto);
+        }
+
+        public async Task AddRoleAsync(List<string> roles)
+        {
+            foreach (string roleName in roles)  await AddRoleAsync(roleName);         
+        }
+
+        public async Task AddRoleAsync( string roleName)
+        {
+            var role = await Database.RoleManager.FindByNameAsync(roleName);
+            if (role == null)
             {
-                return map.Map<UserDTO>(user);
+                role = new ApplicationRole { Name = roleName };
+                await Database.RoleManager.CreateAsync(role);
             }
-            else  return null; 
         }
 
-        public UserDTO GetByName(string Name)
+        public void Dispose()
         {
-            var map = mapper.CreateMapper();
-            return map.Map<UserDTO>(Database.Users.Find(u => u.Login == Name).FirstOrDefault());
+            Database.Dispose();
         }
 
-        public UserDTO GetById(int Id)
+        public UserDTO GetById(string id)
         {
             var map = mapper.CreateMapper();
-            return map.Map<UserDTO>(Database.Users.Get(Id));
+
+            return map.Map<UserDTO>(Database.Users.GetById(id));
         }
     }
 }

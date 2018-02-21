@@ -10,7 +10,7 @@ namespace ProjectManager.BLL.DTO
         public int BoardId { get; set; }
         public BoardDTO Board { get; set; }
 
-        public ICollection<CardDTO> Cards { get; set; }
+        public List<CardDTO> Cards { get; set; }
 
         public TaskListDTO()
         {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ProjectManager.BLL.DTO
 {
@@ -11,8 +7,8 @@ namespace ProjectManager.BLL.DTO
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<TaskListDTO> TaskLists { get; set; }
-        public ICollection<UserDTO> Users { get; set; }
+        public List<TaskListDTO> TaskLists { get; set; }
+        public List<UserDTO> Users { get; set; }
 
         public BoardDTO()
         {
