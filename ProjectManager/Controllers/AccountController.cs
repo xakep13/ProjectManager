@@ -51,7 +51,7 @@ namespace ProjectManager.Controllers
                     {
                         IsPersistent = true
                     }, claim);
-                    return RedirectToAction("Index", "Board");
+                    return RedirectToAction("Index", "Home");
                 }
             }
             return View(model);
@@ -60,7 +60,7 @@ namespace ProjectManager.Controllers
         public ActionResult Logout()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Board");
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Register()

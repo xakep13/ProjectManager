@@ -1,49 +1,48 @@
-﻿using ProjectManager.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ProjectManager.BLL.Interfaces;
+using ProjectManager.Models;
 using ProjectManager.BLL.DTO;
 
 namespace ProjectManager.Controllers
 {
-    public class TaskListController : BaseController
+    public class CardController : BaseController
     {
-        public TaskListController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card)
+        public CardController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card)
         {
         }
 
-        // GET: TaskList
+        // GET: Card
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: TaskList/Details/5
+        // GET: Card/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: TaskList/Create
+        // GET: Card/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: TaskList/Create
+        // POST: Card/Create
         [HttpPost]
-        public ActionResult Create(TaskListViewModel data)
+        public ActionResult Create(CardViewModel data)
         {
             try
             {
                 var map = mapper.CreateMapper();
+                CardDTO card = map.Map<CardDTO>(data);
 
-                TaskListDTO taskList = map.Map<TaskListDTO>(data);
-
-                taskList.Id = TaskListService.Create(taskList);
+                card.Id = CardService.Create(card);
 
                 return RedirectToAction("Index");
             }
@@ -53,13 +52,13 @@ namespace ProjectManager.Controllers
             }
         }
 
-        // GET: TaskList/Edit/5
+        // GET: Card/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: TaskList/Edit/5
+        // POST: Card/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
@@ -75,13 +74,13 @@ namespace ProjectManager.Controllers
             }
         }
 
-        // GET: TaskList/Delete/5
+        // GET: Card/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: TaskList/Delete/5
+        // POST: Card/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {

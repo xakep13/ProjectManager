@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using ProjectManager.BLL.Interfaces;
 using ProjectManager.BLL.DTO;
 using Microsoft.AspNet.Identity;
+using ProjectManager.Models;
 
 namespace ProjectManager.Controllers
 {
@@ -14,17 +11,18 @@ namespace ProjectManager.Controllers
         public BoardController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card){        }
 
         [HttpPost]
-        public ActionResult Create(string name)
+        public ActionResult Create(BoardViewModel data)
         {
-            string id = User.Identity.GetUserId();
-            UserDTO userDTO = UserService.GetById(id);
+            var map = mapper.CreateMapper();
 
-            BoardDTO boardDTO = new BoardDTO() { Name = name };
+            UserDTO userDTO = UserService.GetById(User.Identity.GetUserId());
+            BoardDTO boardDTO = map.Map<BoardDTO>(data);
             boardDTO.Users.Add(userDTO);
-            int i = BoardService.Create(boardDTO);
+            boardDTO.Id = BoardService.Create(boardDTO);
 
-            if (i != -1) return null;
-            else         return null;
+            return null;
         }
+
+        
     }
 }
