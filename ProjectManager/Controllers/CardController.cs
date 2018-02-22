@@ -11,89 +11,43 @@ namespace ProjectManager.Controllers
 {
     public class CardController : BaseController
     {
-        public CardController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card)
+        public CardController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card) { }
+
+        public int Create(int id,CardViewModel data)
         {
+            var map = mapper.CreateMapper();
+            TaskListDTO taskList = TaskListService.Get(id);
+            CardDTO card = map.Map<CardDTO>(data);
+            taskList.Cards.Add(card);
+
+            int j = TaskListService.Update(taskList);
+            int i = card.Id = CardService.Create(card);
+
+            if (i != -1 && j != -1) ; //to do something
+            return i;
+
         }
 
-        // GET: Card
-        public ActionResult Index()
+        public int Update(CardViewModel data)
         {
-            return View();
+            var map = mapper.CreateMapper();
+            CardDTO card = map.Map<CardDTO>(data);
+            int i = card.Id = CardService.Update(card);
+            return i;
+
         }
 
-        // GET: Card/Details/5
-        public ActionResult Details(int id)
+        public int Delete(int id, CardViewModel data)
         {
-            return View();
-        }
+            var map = mapper.CreateMapper();
+            TaskListDTO taskList = TaskListService.Get(id);
+            CardDTO card = map.Map<CardDTO>(data);
+            taskList.Cards.Remove(card);
+            int j = TaskListService.Update(taskList);
+            int i = CardService.Delete(card);
 
-        // GET: Card/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Card/Create
-        [HttpPost]
-        public ActionResult Create(CardViewModel data)
-        {
-            try
-            {
-                var map = mapper.CreateMapper();
-                CardDTO card = map.Map<CardDTO>(data);
-
-                card.Id = CardService.Create(card);
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Card/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Card/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Card/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Card/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            if (i != -1 && j != -1) ; //to do something
+            return i;
         }
     }
 }

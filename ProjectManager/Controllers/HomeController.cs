@@ -14,14 +14,14 @@ namespace ProjectManager.Controllers
     {
         public HomeController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card) { }
 
-        public ActionResult Index()
+        public JsonResult Index()
         {
             
             var map = mapper.CreateMapper();
             IEnumerable<BoardDTO> board = BoardService.GetAll(User.Identity.GetUserId());
             IEnumerable<BoardViewModel> myboard = map.Map<IEnumerable<BoardViewModel>>(board);
 
-            return View(myboard);
+            return Json(myboard, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -11,90 +11,44 @@ namespace ProjectManager.Controllers
 {
     public class TaskListController : BaseController
     {
-        public TaskListController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card)
+        public TaskListController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card) { }
+
+        public int Create(int id, TaskListViewModel data)
         {
+            var map = mapper.CreateMapper();
+
+            BoardDTO board = BoardService.Get(id);
+            TaskListDTO taskList = map.Map<TaskListDTO>(data);
+            board.TaskLists.Add(taskList);
+
+            int i = taskList.Id = TaskListService.Create(taskList);
+            int j = BoardService.Update(board);
+
+            if (i != -1 && j != -1) ; //to do something
+                return i;
+
         }
 
-        // GET: TaskList
-        public ActionResult Index()
+        public int Update(TaskListViewModel data)
         {
-            return View();
+            var map = mapper.CreateMapper();
+            TaskListDTO taskList = map.Map<TaskListDTO>(data);
+            int i = taskList.Id = TaskListService.Update(taskList);
+            return i;
         }
 
-        // GET: TaskList/Details/5
-        public ActionResult Details(int id)
+        public int Delete(int id, TaskListViewModel data)
         {
-            return View();
-        }
+            var map = mapper.CreateMapper();
+            BoardDTO board = BoardService.Get(id);
+            TaskListDTO taskList = map.Map<TaskListDTO>(data);
+            board.TaskLists.Remove(taskList);
 
-        // GET: TaskList/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+            int j = BoardService.Update(board);
+            int i = TaskListService.Delete(taskList);
 
-        // POST: TaskList/Create
-        [HttpPost]
-        public ActionResult Create(TaskListViewModel data)
-        {
-            try
-            {
-                var map = mapper.CreateMapper();
-
-                TaskListDTO taskList = map.Map<TaskListDTO>(data);
-
-                taskList.Id = TaskListService.Create(taskList);
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: TaskList/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: TaskList/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: TaskList/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: TaskList/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            if (i != -1 && j != -1) ; //to do something
+            return i;
         }
     }
 }
