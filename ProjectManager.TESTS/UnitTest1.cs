@@ -74,10 +74,10 @@ namespace ProjectManager.TESTS
             Mock<ITaskListService> mtaskList = new Mock<ITaskListService>();
             Mock<ICardService> mcard = new Mock<ICardService>();
 
-            muser.Setup(m => m.GetById("id")).Returns(new UserDTO { Id = "id", Login = "login" });
-            mboard.Setup(m => m.Get(1)).Returns(new BoardDTO { Id = 1, Name = "board" });
-            mtaskList.Setup(m => m.Get(1)).Returns(new TaskListDTO { Id = 1, Name = "taskList" });
-            mcard.Setup(m => m.Get(1)).Returns(new CardDTO { Id = 1, Name = "card" });
+            muser       .Setup(m => m.GetById("id"))    .Returns(new UserDTO        { Id = "id", Login = "login" });
+            mboard      .Setup(m => m.Get(1))           .Returns(new BoardDTO       { Id = 1, Name = "board" });
+            mtaskList   .Setup(m => m.Get(1))           .Returns(new TaskListDTO    { Id = 1, Name = "taskList" });
+            mcard       .Setup(m => m.Get(1))           .Returns(new CardDTO        { Id = 1, Name = "card" });
 
             CardController card = new CardController(muser.Object, mboard.Object, mtaskList.Object, mcard.Object);
             Models.CardViewModel model = new Models.CardViewModel { Name = "card" };

@@ -1,19 +1,117 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title </title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <title>Glazzed Admin Theme</title>
+    <link media="all" href="~/Content/index.css" type="text/css" rel="stylesheet">
 </head>
 <body>
-   
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        
+    <div id="loading" style="display: none;">
+        <div class="loader loader-light loader-large"></div>
     </div>
+    <header class="top-bar">
+
+        <ul class="profile">
+            <li>
+                <a href="#" class="btn-circle no-circle">
+                    <i class="pe-7f-back"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="return false;" class="btn-circle btn-sm">
+                    <i class="pe-7f-mail"></i>
+                    <span class="badge badge--blue">8</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="return false;" class="btn-circle btn-sm">
+                    <i class="pe-7g-sets"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="return false;" class="btn-circle btn-sm active">
+                    <i class="pe-7g-user"></i>
+                </a>
+            </li>
+            <li class="mobile-nav">
+                <a href="#" onclick="return false;" class="btn-circle btn-sm">
+                    <i class="pe-7f-menu"></i>
+                </a>
+            </li>
+        </ul>
+        <div class="main-search">
+            <input placeholder="Search ..." id="msearch" value="" type="text">
+            <label for="msearch">
+                <i class="pe-7s-search"></i>
+            </label>
+            <button>
+                <i class="pe-7g-arrow-circled pe-rotate-90"></i>
+            </button>
+        </div>
+
+        <div class="main-brand">
+            <div class="main-brand__container"></div>
+        </div>
+
+    </header> <!-- /top-bar -->
+
+    <div class="wrapper">
+        <aside class="sidebar">
+            <ul class="main-nav">
+                <li class="main-nav--collapsible">
+                    <a class="main-nav__link" href="#">
+                        <span class="main-nav__icon"><i class="pe-7f-home"></i></span>
+                        Dashboard <span class="badge badge--line badge--blue">2</span>
+                    </a>
+                    <ul class="main-nav__submenu">
+                        <li><a href="404.html" indepth="true"><span>Error 404</span></a></li>
+                        <li><a href="login.html" indepth="true"><span>Login</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="main-nav__link" href="ui.html" indepth="true">
+                        <span class="main-nav__icon"><i class="pe-7f-edit"></i></span>
+                        UI Elements
+                    </a>
+                </li>
+                <li class="main-nav--collapsible">
+                    <a class="main-nav__link" href="#" onclick="return false;">
+                        <span class="main-nav__icon"><i class="pe-7f-monitor"></i></span>
+                        Sample pages <span class="badge badge--line badge--blue">2</span>
+                    </a>
+                    <ul class="main-nav__submenu">
+                        <li><a href="404.html" indepth="true"><span>Error 404</span></a></li>
+                        <li><a href="login.html" indepth="true"><span>Login</span></a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="main-nav__link" href="grid.html" indepth="true">
+                        <span class="main-nav__icon"><i class="pe-7f-browser"></i></span>
+                        Grid Layout
+                    </a>
+                </li>
+                <li>
+                    <a class="main-nav__link" href="tables.html" indepth="true">
+                        <span class="main-nav__icon"><i class="pe-7f-note"></i></span>
+                        Tables &amp; forms
+                    </a>
+                </li>
+                <li>
+                    <a class="main-nav__link" href="stats.html" indepth="true">
+                        <span class="main-nav__icon"><i class="pe-7f-graph3"></i></span>
+                        Statistics
+                    </a>
+                </li>
+            </ul> <!-- /main-nav -->
+
+        </aside> <!-- /sidebar -->
+
+        <section class="content">         
+            @RenderBody()   
+            </section>
+        </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

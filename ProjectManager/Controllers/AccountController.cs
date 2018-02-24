@@ -18,7 +18,7 @@ namespace ProjectManager.Controllers
     public class AccountController : Controller
     {
         private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
-        
+
         IUserService UserService;
         public AccountController(IUserService service)
         {
@@ -78,13 +78,13 @@ namespace ProjectManager.Controllers
                 UserDTO userDto = new UserDTO
                 {
                     Email = model.Email,
-                    Password = model.Password,                 
+                    Password = model.Password,
                     Login = model.Login,
                     Role = "user"
                 };
                 OperationDetails operationDetails = await UserService.Create(userDto);
-                if (operationDetails.Succedeed)  return RedirectToAction("Index", "Board");
-                else  ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
+                if (operationDetails.Succedeed) return RedirectToAction("Index", "Board");
+                else ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }
             return View(model);
         }
@@ -94,105 +94,9 @@ namespace ProjectManager.Controllers
             {
                 Email = "somemail@mail.ru",
                 Login = "somelogin",
-                Password = "ad46D_ewr3",              
+                Password = "ad46D_ewr3",
                 Role = "admin",
             }, new List<string> { "user", "admin" });
         }
     }
-
-
-
-
-
-
-
-
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public ActionResult Register()
-        //{
-        //    if (HttpContext.User.Identity.IsAuthenticated)
-        //        FormsAuthentication.SignOut(); 
-        //    return View("Register");
-        //}
-        //[AllowAnonymous]
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Register(UserRegistrationViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        UserDTO user = new UserDTO
-        //        {
-        //            Email = model.Email,
-        //            Login = model.Login,
-        //            Password = model.Password
-        //        };
-        //        bool created = _service.Create(user);
-        //        if (created)
-        //        {
-        //            UserLoginViewModel Loginmodel = new UserLoginViewModel
-        //            {
-        //                Login = model.Login,
-        //                Password = model.Password,
-        //                RememberMe = true
-        //            };                  
-        //            return Login(Loginmodel);
-        //        }
-        //        else
-        //        {
-        //            ModelState.AddModelError("", "A user with this Login or Email already registered");
-        //            return View("Register");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        ModelState.AddModelError("", "Check the correct of entered data");
-        //        return View("Register");
-        //    }
-        //}
-        //[HttpGet]
-        //[AllowAnonymous]
-        //[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        //public ActionResult Login()
-        //{
-        //    if (HttpContext.User.Identity.IsAuthenticated)
-        //        return RedirectToAction("Index", "Board");
-        //    else
-        //    {
-        //        FormsAuthentication.SignOut();
-        //        return View("Login");
-        //    }
-        //}
-
-        //[AllowAnonymous]
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        //public ActionResult Login(UserLoginViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        UserDTO user = _service.Login(model.Login, model.Password);
-        //        if (user == null)
-        //        {
-        //            ModelState.AddModelError("", "Invalid login or password");
-        //            return View("Login");
-        //        }
-        //        else
-        //        {
-        //            FormsAuthentication.SetAuthCookie(Convert.ToString(user.Id), model.RememberMe);
-        //            return RedirectToAction("Index", "Order");
-        //        }
-        //    }
-        //    else  ModelState.AddModelError("", "Check the correct of entered data"); 
-        //    return View();
-        //}
-        //[Authorize]
-        //public ActionResult LogOut()
-        //{
-        //    FormsAuthentication.SignOut();
-        //    return RedirectToAction("Login");
-        //}
-    
 }

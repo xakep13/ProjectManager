@@ -37,7 +37,6 @@ namespace ProjectManager.Controllers
                 cfg.CreateMap<CardViewModel, CardDTO>();
 
                 cfg.CreateMap<UserDTO, UserViewModel>();
-               
             });
         }
     }

@@ -1,13 +1,12 @@
-﻿body {
+﻿/*body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
-
 /* Set padding to keep content from hitting the edges */
-.body-content {
+/*.body-content {
     padding-left: 15px;
     padding-right: 15px;
-}
+}*/
 
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
@@ -20,5 +19,116 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    width: 280px;
+}
+
+.align {
+    text-align: right;
+}
+
+table > thead > tr > th.backgr {
+    background-color: white;
+}
+
+.login-form {
+    padding-top: 50px;
+    width: 320px;
+    margin: 0px auto 0px auto;
+}
+
+.carousel img, .item {
+    max-height: 200px !important;
+    max-width: 200px !important;
+}
+
+.carousel-control {
+    color: #373e4a;
+}
+
+    .carousel-control.right {
+        background-image: none;
+    }
+
+    .carousel-control.left {
+        background-image: none;
+    }
+
+select.ng-invalid {
+    box-shadow: 0 0 2px #d45252;
+    border-color: #b03535
+}
+
+select.ng-valid {
+    box-shadow: 0 0 2px #5cd053;
+    border-color: #28921f;
+}
+
+input.ng-invalid {
+    box-shadow: 0 0 2px #d45252;
+    border-color: #b03535
+}
+
+input.ng-valid {
+    box-shadow: 0 0 2px #5cd053;
+    border-color: #28921f;
+}
+
+textarea.ng-invalid {
+    box-shadow: 0 0 2px #d45252;
+    border-color: #b03535
+}
+
+textarea.ng-valid {
+    box-shadow: 0 0 2px #5cd053;
+    border-color: #28921f;
+}
+
+textarea.ng-pristine {
+    box-shadow: 0 0 0 white;
+    border-color: #aaaaaa;
+}
+
+select.ng-pristine {
+    box-shadow: 0 0 0 white;
+    border-color: #aaaaaa;
+}
+
+input.ng-pristine {
+    box-shadow: 0 0 0 white;
+    border-color: #aaaaaa;
+}
+
+textarea.form-control.no-valid {
+    box-shadow: 0 0 0 white;
+    border-color: #aaaaaa;
+}
+
+input.form-control.no-valid {
+    box-shadow: 0 0 0 white;
+    border-color: #aaaaaa;
+}
+
+checkbox.form-control.no-valid {
+    box-shadow: 0 0 0 white;
+    border-color: #aaaaaa;
+}
+
+div.panel.panel-default.address-invalid {
+    box-shadow: 0 0 2px #d45252;
+    border-color: #b03535;
+}
+
+div.panel.panel-default.address-valid {
+    box-shadow: 0 0 2px #5cd053;
+    border-color: #28921f;
+}
+
+oi-select.invalid {
+    box-shadow: 0 0 2px #d45252;
+    border-color: #b03535;
+}
+
+oi-select.valid {
+    box-shadow: 0 0 2px #5cd053;
+    border-color: #28921f;
 }
