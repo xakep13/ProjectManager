@@ -1,5 +1,5 @@
 ﻿[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(ProjectManager.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(ProjectManager.App_Start.NinjectWebCommon), "Stop")]
+[assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(ProjectManager.App_Start.NinjectWebCommon), "Stop")]
 
 
 

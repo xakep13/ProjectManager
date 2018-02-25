@@ -1,44 +1,58 @@
 ﻿@{
     ViewBag.Title = "Login";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
-<div class="login-container center-block">
-    <div class="login-form" id="login_form">
-        <div class="login-content">
-            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "form_login", @novalidate = "novalidate", @class = "form_horizontal" }))
-            {
-                <div class="form-login-error">
-                    @Html.AntiForgeryToken()
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon">
-                            <i class="entypo-user"></i>
-                        </div>
-                        <input type="text" class="form-control" name="Login" id="Login" placeholder="Login" autocomplete="off">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon">
-                            <i class="entypo-key"></i>
-                        </div>
-                        <input type="password" class="form-control" name="Password" id="Password" placeholder="Password" autocomplete="off">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label><input type="checkbox" id="RememberMe" name="RememberMe" value="true" data-val="true" /> Remember me.</label>
-                    </div>
-                </div>
-                <div class="form-group">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+
+   
+
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+
+
+    <!-- Pixeden Icon Fonts -->
+
+
+    <link media="all" href="~/Content/login.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+    <div id="loading">
+        
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "form_login", @novalidate = "novalidate", @class = "form_horizontal" }))
+    {
+        <div class="form-login-error">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-4  col-md-offset-4">
+            <article class="widget widget__login">
+               
+                <div class="widget__content">
+                    <input type="text" class="form-control" name="Login" id="Login" placeholder="Login" autocomplete="off">
+                    <input type="password" class="form-control" name="Password" id="Password" placeholder="Password" autocomplete="off">
                     <button type="submit" class="btn btn-primary btn-block btn-login">
                         <i class="entypo-login"></i>
                         Login In
                     </button>
+                    </div>
+                <div class="login__remember text-center">
+                    <label><input type="checkbox" id="RememberMe" name="RememberMe" value="true" data-val="true" /> Remember me.</label>
                 </div>
-            }
+            </article><!-- /widget -->
         </div>
+    }
     </div>
-</div>
+
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="amcharts.js"></script>
+    <script type="text/javascript" src="serial.js"></script>
+    <script type="text/javascript" src="pie.js"></script>
+    <script type="text/javascript" src="chart.js"></script>
+</body>
+</html>

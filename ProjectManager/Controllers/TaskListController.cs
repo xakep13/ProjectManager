@@ -13,18 +13,16 @@ namespace ProjectManager.Controllers
     {
         public TaskListController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card) { }
 
-        public int Create(int id, TaskListViewModel data)
+        public int Create(string name, int id)
         {
             var map = mapper.CreateMapper();
 
             BoardDTO board = BoardService.Get(id);
-            TaskListDTO taskList = map.Map<TaskListDTO>(data);
-            board.TaskLists.Add(taskList);
+            TaskListDTO taskList = new TaskListDTO {Name = name , BoardId = board.Id};
 
             int i = taskList.Id = TaskListService.Create(taskList);
-            int j = BoardService.Update(board);
 
-            if (i != -1 && j != -1) ; //to do something
+
                 return i;
 
         }

@@ -13,19 +13,15 @@ namespace ProjectManager.Controllers
     {
         public CardController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card) { }
 
-        public int Create(int id,CardViewModel data)
+        public int Create(string name,int id, string description)
         {
             var map = mapper.CreateMapper();
             TaskListDTO taskList = TaskListService.Get(id);
-            CardDTO card = map.Map<CardDTO>(data);
-            taskList.Cards.Add(card);
-
-            int j = TaskListService.Update(taskList);
+            CardDTO card = new CardDTO { Name = name, TaskListId = taskList.Id,Description=description };
+            
             int i = card.Id = CardService.Create(card);
 
-            if (i != -1 && j != -1) ; //to do something
             return i;
-
         }
 
         public int Update(CardViewModel data)

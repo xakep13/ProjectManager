@@ -353,7 +353,7 @@ blockquote footer::before, blockquote small::before, blockquote .small::before {
   .col-md-6 { width: 50%; }
   .col-md-5 { width: 41.6667%; }
   .col-md-4 { width: 33.3333%; }
-  .col-md-3 { width: 25%; }
+  .col-md-3 {  }
   .col-md-2 { width: 16.6667%; }
   .col-md-1 { width: 8.33333%; }
   .col-md-pull-12 { right: 100%; }
@@ -998,7 +998,12 @@ button.close { padding: 0px; cursor: pointer; background: transparent none repea
     unicode-range: U+100-24F, U+259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: "Source Sans Pro";  font-style: normal;  font-weight: 600;  src: local("Source Sans Pro SemiBold"), local("SourceSansPro-SemiBold"), url('6xkydsbykcsv-lcoeqqfx1ryoo3i54rwlxdu.woff2') format("woff2");  unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: 600;
+    src: local("Source Sans Pro SemiBold"), local("SourceSansPro-SemiBold"), url('/Content/Images/6xkydsbykcsv-lcoeqqfx1ryoo3i54rwlxdu.woff2') format("woff2");
+    unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video { margin: 0px; padding: 0px; border: 0px none; font: inherit; vertical-align: baseline; }
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
 body { line-height: 1; }
