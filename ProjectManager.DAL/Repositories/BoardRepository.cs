@@ -7,7 +7,5 @@ namespace ProjectManager.DAL.Repositories
     public class BoardRepository : EntityRepository<Board>, IBoardRepository
     {
         public BoardRepository(AplicationContext context) : base(context) { }
-
-        
     }
 }

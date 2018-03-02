@@ -26,7 +26,7 @@ namespace ProjectManager.BLL.Service
                     .ForMember(x => x.Login, y => y.MapFrom(z => z.ApplicationUser.UserName))
                     .ForMember(x => x.Role, y => y.MapFrom(z => z.ApplicationUser.Roles.FirstOrDefault()))
                     .ForMember(x => x.Boards, y => y.MapFrom(z => z.Boards));
-                
+                                
                 cfg.CreateMap<Board, BoardDTO>();
                 cfg.CreateMap<BoardDTO, Board>();
                 cfg.CreateMap<Card, CardDTO>();

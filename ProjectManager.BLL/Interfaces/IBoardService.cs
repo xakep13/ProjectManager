@@ -6,5 +6,6 @@ namespace ProjectManager.BLL.Interfaces
     public interface IBoardService : IBaseService<BoardDTO>
     {
         IEnumerable<BoardDTO> GetAll(string id);
+        int Create(BoardDTO boardDTO, string v);
     }
 }

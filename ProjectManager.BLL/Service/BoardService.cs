@@ -82,5 +82,21 @@ namespace ProjectManager.BLL.Service
         {
             throw new NotImplementedException();
         }
+
+        public int Create(BoardDTO data, string v)
+        {
+            if (data != null && !String.IsNullOrEmpty(v))
+            {
+                var map = mapper.CreateMapper();
+                Board board = map.Map<Board>(data);
+                ClientProfile client = Database.Users.GetById(v);
+                board.Users.Add(client);
+                Database.Boards.Create(board);
+                Database.Save();
+
+                return board.Id;
+            }
+            else return -1;
+        }
     }
 }

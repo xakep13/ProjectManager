@@ -11,14 +11,13 @@ namespace ProjectManager.Controllers
         public BoardController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card){        }
 
         
-        public int Create(string id, BoardViewModel data)
+        public int Create(string name)
         {
             var map = mapper.CreateMapper();
 
-            UserDTO userDTO = UserService.GetById(id);
-            BoardDTO boardDTO = map.Map<BoardDTO>(data);
-            boardDTO.Users.Add(userDTO);
-            int i = boardDTO.Id = BoardService.Create(boardDTO);
+            BoardDTO boardDTO = new BoardDTO { Name = name };
+
+            int i = boardDTO.Id = BoardService.Create(boardDTO, User.Identity.GetUserId());
 
             return i;
         }
@@ -42,8 +41,6 @@ namespace ProjectManager.Controllers
             BoardDTO board = map.Map<BoardDTO>(data);
             int i = BoardService.Update(board);
             return i;
-        }
-
-        
+        }  
     }
 }

@@ -1,127 +1,42 @@
 ﻿@using ProjectManager.Models
-@model BoardViewModel
+@model IEnumerable<BoardViewModel>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<header class="main-header" id="@Model.Id">
-    <div class="main-header__nav">
-        <h1 class="main-header__title">
-            <i class="pe-7f-home"></i>
-            <span>@Model.Name</span>
-        </h1>
-    </div>
-</header> <!-- /main-header -->
+<div class="wrapper">
+    <aside class="sidebar">
+        <ul class="main-nav">
+            <li class="main-nav--collapsible">
+                <a class="main-nav__link" >
+                    <span class="main-nav__icon"><i class="pe-7f-home"></i></span>
+                    Dashboard <span class="badge badge--line badge--blue">2</span>
+                </a>
+                <ul class="main-nav__submenu">
+                    @foreach (BoardViewModel board in Model)
+                    {
+                        <li>
+                            @Ajax.ActionLink(board.Name, "GetBoard", new { id = board.Id }, new AjaxOptions { UpdateTargetId = "results" }, new { @class = "board-"+board.Id })
+                        </li>
+                    }
+                </ul>
+                <input type="text" placeholder="Name" class="new_board_name" />
+                <input type="button" value="New Board" class="create_new_board" />
+            </li>
+        </ul>
+    </aside>
 
-<div class="row">
-    @foreach (TaskListViewModel list in Model.TaskLists)
-    {
-        <div class="col-md-3" id="@list.Id">
-            <article class="widget">
-                <header class="widget__header one-btn">
-                    <div class="widget__title">
-                        <i class="pe-7f-menu pe-rotate-90"></i><h3>@list.Name</h3>
-                    </div>
-                    <div class="widget__config">
-                        <a href="#"><i class="pe-7f-refresh"></i></a>
-                    </div>
-                </header>
+    <section class="content">
 
-                <div class="widget__content widget__grid filled pad20">
-                    <div class="ui-widget ui-corner-all">
-                        <table id="table-@list.Id">
-                                <tr><th></th></tr>
-                            @foreach (CardViewModel card in list.Cards)
-                            {
-                                <tr id="card-@card.Id">
-                                    <th>@card.Name : </th>
-                                    <th>@card.Description</th>
-                                </tr>
-                                
-                            }
-                        </table>
-                        <input id="name_new_card-@list.Id" type="text" value="Name"/>
-                        <input id ="description-@list.Id" type="text" value="Description"/>
-
-                        <input id="@list.Id" class="create_card" type="button" value="Create Card"/>
-                    </div>
-                </div> <!-- /widget__content -->
-            </article><!-- /widget -->
+        <div id="results">
+            @Html.Partial("GetBoard", Model.FirstOrDefault());
         </div>
-    }
-
-    <input id="name_new_list" type="text" />
-    <input id="create" type="button" value="Create List" />
 
 
+        @section scripts{
+        </section>
+    </div>
 
-
-
-                </div> <!-- /row -->
-
-                @section scripts{
-                    <script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-                    <script type="text/javascript" src="~/Scripts/app.js"></script>
-                    <script type="text/javascript">
-                        $("#create").click(function () {
-                            var id = $(".main-header").attr("id");
-                            var name = $("#name_new_list").val();
-                            if (name.length > 1) {
-                                $.ajax({
-                                    url: '/TaskList/Create/?name=' + name + '&id=' + id,
-                                    success: function (data) {
-                                        var result = '<div class="col-md-3" id="' + data + '">' +
-                                            '<article class="widget">' +
-                                            '<header class="widget__header one-btn">' +
-                                            '<div class="widget__title">' +
-                                            '<i class="pe-7f-menu pe-rotate-90"></i><h3>' + name + '</h3>' +
-                                            '</div>' +
-                                            '<div class="widget__config" >' +
-                                            '<a href="#"><i class="pe-7f-refresh"></i></a>' +
-                                            '</div >' +
-                                            '</header >' +
-                                            '<div class="widget__content widget__grid filled pad20">' +
-                                            '<div class="ui-widget ui-corner-all">' +
-                                            '<table id="table-' + data + '">' +
-                                            '<tr><th></th></tr>'+
-                                            '</table>' +
-                                            '<input id="name_new_card-' + data + '" type="text" value="Name"/>' +
-                                            '<input id="description-'   + data + '" type="text" value="Description"/>' +
-                                            '<input id="' + data + '" class="create_card" type="button" value="Create Card"/>' +
-                                            '</div >' +
-                                            '</div > <!-- /widget__content -->' +
-                                            '</article ><!-- /widget -->' +
-                                            '</div >';
-
-                                        $('.row').append(result);
-                                    }
-
-                                })
-                            }
-
-
-                        });
-
-                        $(".create_card").click(function () {
-                            var id = $(this).attr("id");
-                            var name = $("#name_new_card-" + id).val();
-                            var description = $("#description-" + id).val();
-                           $.ajax({
-                               url: '/Card/Create/?name=' + name + '&id=' + id + '&description=' + description,
-                               success: function (data) {
-                                   
-                                   var result = '<tr id="card-' + data + '">' +
-                                                    '<th>' + name + ': </th>' +
-                                                    '<th>' + description + '</th>' +
-                                                '</tr>';
-
-                                   $('#table-' + id).append(result);
-                               },
-                               error: function (x, y, z) {
-                                   alert(x + '\n' + y + '\n' + z);
-                               }
-                               
-                           })
-                        });
-                    </script>
-                }
+    <script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/app.js"></script>
+        }
