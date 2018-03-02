@@ -34,9 +34,9 @@ namespace ProjectManager.BLL.Service
 
                 board.Users.Add(clientProfile);
 
-                TaskList taskList1 = new TaskList() {  Name = "Зробити", Board = board };
-                TaskList taskList2 = new TaskList() {  Name = "РОбиться", Board = board };
-                TaskList taskList3 = new TaskList() {  Name = "Готово", Board = board };
+                TaskList taskList1 = new TaskList() {  Name = "To Do", Board = board };
+                TaskList taskList2 = new TaskList() {  Name = "Doing", Board = board };
+                TaskList taskList3 = new TaskList() {  Name = "Done", Board = board };
 
                 board.TaskLists.AddRange(new List<TaskList> { taskList1, taskList2, taskList3 });
 

@@ -10,7 +10,7 @@
             <li class="main-nav--collapsible">
                 <a class="main-nav__link" >
                     <span class="main-nav__icon"><i class="pe-7f-home"></i></span>
-                    Dashboard <span class="badge badge--line badge--blue">2</span>
+                    Dashboard <span class="badge badge--line badge--blue">@Model.Count()</span>
                 </a>
                 <ul class="main-nav__submenu">
                     @foreach (BoardViewModel board in Model)
@@ -19,24 +19,25 @@
                             @Ajax.ActionLink(board.Name, "GetBoard", new { id = board.Id }, new AjaxOptions { UpdateTargetId = "results" }, new { @class = "board-"+board.Id })
                         </li>
                     }
+                        <li class="qwerty">
+                            <div class="col-xs-2">
+                                <input class="form-control new_board_name" placeholder="Name"  type="text">
+                                <input type="button" value="New Board" class="create_new_board ui-button" />
+                            </div>
+                           
+                        </li>
                 </ul>
-                <input type="text" placeholder="Name" class="new_board_name" />
-                <input type="button" value="New Board" class="create_new_board" />
             </li>
         </ul>
     </aside>
-
     <section class="content">
-
         <div id="results">
             @Html.Partial("GetBoard", Model.FirstOrDefault());
         </div>
+    </section>
+</div>
 
-
-        @section scripts{
-        </section>
-    </div>
-
+@section scripts{
     <script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
     <script type="text/javascript" src="~/Scripts/app.js"></script>
-        }
+}

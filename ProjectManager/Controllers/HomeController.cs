@@ -13,6 +13,7 @@ namespace ProjectManager.Controllers
     public class HomeController : BaseController
     {
         public HomeController(IUserService user, IBoardService board, ITaskListService taskList, ICardService card) : base(user, board, taskList, card) { }
+
         [Authorize]
         public ActionResult Index()
         {        
@@ -22,17 +23,14 @@ namespace ProjectManager.Controllers
 
             return View(myboard);
         }
-
-       
+  
         public ActionResult GetBoard(int id)
         {
             var map = mapper.CreateMapper();
-            IEnumerable<BoardDTO> board = BoardService.GetAll(User.Identity.GetUserId());
-            IEnumerable<BoardViewModel> myboard = map.Map<IEnumerable<BoardViewModel>>(board);
+            BoardDTO board = BoardService.GetByUserId(id,User.Identity.GetUserId());
+            BoardViewModel myboard = map.Map<BoardViewModel>(board);
 
-            
-
-            return PartialView("GetBoard",map.Map<BoardViewModel>(myboard.First(x=>x.Id==id)));
+            return PartialView("GetBoard", map.Map<BoardViewModel>(myboard));
         }
     }
 }

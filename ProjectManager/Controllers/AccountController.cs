@@ -83,7 +83,25 @@ namespace ProjectManager.Controllers
                     Role = "user"
                 };
                 OperationDetails operationDetails = await UserService.Create(userDto);
-                if (operationDetails.Succedeed) return RedirectToAction("Index", "Board");
+                if (operationDetails.Succedeed)
+                {
+                    UserDTO userDto1 = new UserDTO { Login = model.Login, Password = model.Password };
+                    ClaimsIdentity claim = await UserService.Authenticate(userDto1);
+                    if (claim == null)
+                    {
+                        ModelState.AddModelError("", "Неверный логин или пароль.");
+                    }
+                    else
+                    {
+                        AuthenticationManager.SignOut();
+                        AuthenticationManager.SignIn(new AuthenticationProperties
+                        {
+                            IsPersistent = true
+                        }, claim);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    
+                }
                 else ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }
             return View(model);

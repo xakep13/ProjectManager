@@ -78,10 +78,6 @@ namespace ProjectManager.BLL.Service
             else return -1;
         }
 
-        public IEnumerable<BoardDTO> GetAll(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         public int Create(BoardDTO data, string v)
         {
@@ -97,6 +93,19 @@ namespace ProjectManager.BLL.Service
                 return board.Id;
             }
             else return -1;
+        }
+
+        public BoardDTO GetByUserId(int id, string v)
+        {
+            var map = mapper.CreateMapper();
+            ClientProfile client = Database.Users.GetById(v);
+
+            return map.Map<BoardDTO>(client.Boards.Find(x => x.Id == id));
+        }
+
+        public IEnumerable<BoardDTO> GetAll(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
