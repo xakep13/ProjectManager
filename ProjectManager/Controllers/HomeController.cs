@@ -22,15 +22,6 @@ namespace ProjectManager.Controllers
             IEnumerable<BoardViewModel> myboard = map.Map<IEnumerable<BoardViewModel>>(board);
 
             return View(myboard);
-        }
-  
-        public ActionResult GetBoard(int id)
-        {
-            var map = mapper.CreateMapper();
-            BoardDTO board = BoardService.GetByUserId(id,User.Identity.GetUserId());
-            BoardViewModel myboard = map.Map<BoardViewModel>(board);
-
-            return PartialView("GetBoard", map.Map<BoardViewModel>(myboard));
-        }
+        } 
     }
 }

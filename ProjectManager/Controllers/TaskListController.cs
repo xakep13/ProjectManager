@@ -35,17 +35,16 @@ namespace ProjectManager.Controllers
             return i;
         }
 
-        public int Delete(int id, TaskListViewModel data)
+        public int Delete(int id, int listId)
         {
             var map = mapper.CreateMapper();
             BoardDTO board = BoardService.Get(id);
-            TaskListDTO taskList = map.Map<TaskListDTO>(data);
-            board.TaskLists.Remove(taskList);
+            TaskListDTO taskList = TaskListService.Get(listId);
 
-            int j = BoardService.Update(board);
+
             int i = TaskListService.Delete(taskList);
 
-            if (i != -1 && j != -1) ; //to do something
+           
             return i;
         }
     }

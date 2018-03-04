@@ -12,14 +12,14 @@
 <div class="row">
     @foreach (TaskListViewModel list in Model.TaskLists)
             {
-        <div class="col-md-3" id="@list.Id">
+        <div class="col-md-3 taskList-@list.Id" id="@list.Id" >
             <article class="widget">
                 <header class="widget__header one-btn">
                     <div class="widget__title">
                         <i class="pe-7f-menu pe-rotate-90"></i><h3>@list.Name</h3>
                     </div>
                     <div class="widget__config">
-                        <a href="#"><i class="pe-7f-refresh"></i></a>
+                        <a ><i id="@list.Id" class="pe-7f-target delete_list"></i></a>
                     </div>
                 </header>
 
@@ -37,17 +37,17 @@
                             }
                         </table>
 
-                        <input id="name_new_card-@list.Id" type="text" placeholder="Name" />
-                        <input id="description-@list.Id" type="text" placeholder="Description" />
+                        <input id="name_new_card-@list.Id" class="form-control" type="text" placeholder="Name" />
+                        <input id="description-@list.Id" type="text" class="form-control" placeholder="Description" />
 
-                        <input id="@list.Id" class="create_card" type="button" value="Create Card" />
+                        <input id="@list.Id" class="create_card btn" type="button" value="Create Card" />
                     </div>
                 </div>
             </article>
         </div>
     }
-
-    <input id="name_new_list" type="text" />
-    <input id="create" type="button" value="Create List" />
-
-</div> 
+    <div class=" col-md-2" id="name_new_list_">
+    <input id="name_new_list" class="form-control" type="text" />
+    <input id="create" type="button" class="btn" value="Create List" />
+    </div>
+</div>

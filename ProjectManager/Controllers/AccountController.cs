@@ -42,7 +42,7 @@ namespace ProjectManager.Controllers
                 ClaimsIdentity claim = await UserService.Authenticate(userDto);
                 if (claim == null)
                 {
-                    ModelState.AddModelError("", "Неверный логин или пароль.");
+                    ModelState.AddModelError("", "Не правильний логін або пароль.");
                 }
                 else
                 {
@@ -89,7 +89,7 @@ namespace ProjectManager.Controllers
                     ClaimsIdentity claim = await UserService.Authenticate(userDto1);
                     if (claim == null)
                     {
-                        ModelState.AddModelError("", "Неверный логин или пароль.");
+                        ModelState.AddModelError("", "Не правильний логін або пароль.");
                     }
                     else
                     {

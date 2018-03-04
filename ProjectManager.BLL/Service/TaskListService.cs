@@ -62,8 +62,8 @@ namespace ProjectManager.BLL.Service
                 var map = mapper.CreateMapper();
                 TaskList taskList = map.Map<TaskList>(data);
 
-                foreach (Card card in taskList.Cards)
-                    Database.Cards.Delete(card.Id);
+                //foreach (Card card in taskList.Cards)
+                //    Database.Cards.Delete(card.Id);
 
                 Database.TaskLists.Delete(taskList.Id);
                 Database.Save();

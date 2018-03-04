@@ -41,6 +41,15 @@ namespace ProjectManager.Controllers
             BoardDTO board = map.Map<BoardDTO>(data);
             int i = BoardService.Update(board);
             return i;
-        }  
+        }
+
+        public ActionResult GetBoard(int id)
+        {
+            var map = mapper.CreateMapper();
+            BoardDTO board = BoardService.GetByUserId(id, User.Identity.GetUserId());
+            BoardViewModel myboard = map.Map<BoardViewModel>(board);
+
+            return PartialView("GetBoard", map.Map<BoardViewModel>(myboard));
+        }
     }
 }

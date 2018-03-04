@@ -6,41 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Board</title>
     <link media="all" href="~/Content/index.css" type="text/css" rel="stylesheet">
+    <link href="~/Content/bootstrap.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-    <div id="loading" style="display: none;">
-        <div class="loader loader-light loader-large"></div>
-    </div>
     <header class="top-bar">
-
-        <ul class="profile">
-            <li>
-                <a href="#" class="btn-circle no-circle">
-                    <i class="pe-7f-back"></i>
-                </a>
-            </li>
-            <li>
-                <a href="#" onclick="return false;" class="btn-circle btn-sm">
-                    <i class="pe-7f-mail"></i>
-                    <span class="badge badge--blue">8</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" onclick="return false;" class="btn-circle btn-sm">
-                    <i class="pe-7g-sets"></i>
-                </a>
-            </li>
-            <li>
-                <a href="#" onclick="return false;" class="btn-circle btn-sm active">
-                    <i class="pe-7g-user"></i>
-                </a>
-            </li>
-            <li class="mobile-nav">
-                <a href="#" onclick="return false;" class="btn-circle btn-sm">
-                    <i class="pe-7f-menu"></i>
-                </a>
-            </li>
-        </ul>
+        <ul class="profile"></ul>
         <div class="main-search">
             <input placeholder="Search ..." id="msearch" value="" type="text">
             <label for="msearch">
@@ -53,29 +23,11 @@
 
         <div class="main-brand">
             <div class="main-brand__container">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    
-                        <a class="btn dark" href="@Url.Action("Logout","Account")">Вийти, @User.Identity.Name</a>
-                    
-                }
-                else
-                {
-                    <li class="nav-item">
-                        <a class="btn dark" href="@Url.Action("Login","Account")">Увійти</a>
-                    </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Register","Account")">Зареєстуватись</a>
-                        </li>
-                }
+               <a class="btn dark" href="@Url.Action("Logout","Account")">Вийти, @User.Identity.Name</a>               
             </div>
         </div>
-
-    </header> <!-- /top-bar -->
-
-          
-            @RenderBody()   
-        
+    </header>     
+    @RenderBody()   
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

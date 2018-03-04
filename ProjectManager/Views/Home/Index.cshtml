@@ -9,30 +9,32 @@
         <ul class="main-nav">
             <li class="main-nav--collapsible">
                 <a class="main-nav__link" >
-                    <span class="main-nav__icon"><i class="pe-7f-home"></i></span>
-                    Dashboard <span class="badge badge--line badge--blue">@Model.Count()</span>
+                    <span class="main-nav__icon"><i class="pe-7f-home"></i></span> Dashboard
+                    <span class="badge badge--line badge--blue">@Model.Count()</span>
                 </a>
                 <ul class="main-nav__submenu">
-                    @foreach (BoardViewModel board in Model)
-                    {
-                        <li>
-                            @Ajax.ActionLink(board.Name, "GetBoard", new { id = board.Id }, new AjaxOptions { UpdateTargetId = "results" }, new { @class = "board-"+board.Id })
-                        </li>
-                    }
-                        <li class="qwerty">
-                            <div class="col-xs-2">
-                                <input class="form-control new_board_name" placeholder="Name"  type="text">
-                                <input type="button" value="New Board" class="create_new_board ui-button" />
-                            </div>
-                           
-                        </li>
+                @foreach (BoardViewModel board in Model)
+                {
+                    <li>
+                        @Ajax.ActionLink(board.Name, "GetBoard", "Board", new { id = board.Id }, new AjaxOptions { UpdateTargetId = "results" }, new { @id = "board-"+board.Id })
+                    </li>
+                }
+                    <li class="qwerty">
+                       <div class="col-xs-8">
+                           <input class="form-control new_board_name" placeholder="Name"  type="text">
+                       </div>  
+                        <div class="col-xs-4">
+
+                           <input type="button" value="New" class="create_new_board  btn" />
+                        </div>
+                    </li>
                 </ul>
             </li>
         </ul>
     </aside>
     <section class="content">
         <div id="results">
-            @Html.Partial("GetBoard", Model.FirstOrDefault());
+            @Html.Partial("~/Views/Board/GetBoard.cshtml", Model.FirstOrDefault())
         </div>
     </section>
 </div>
