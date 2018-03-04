@@ -29,17 +29,15 @@
                             '<i class="pe-7f-menu pe-rotate-90"></i><h3>' + name + '</h3>' +
                             '</div>' +
                             '<div class="widget__config" >' +
-                            '<a  href=""><i id="' + data +'" class="pe-7f-refresh delete_list"></i></a>' +
+                            '<a ><i id="'+data+'" class="pe-7s-close delete_list"></i></a>' +
                             '</div >' +
                             '</header >' +
                             '<div class="widget__content widget__grid filled pad20">' +
-                            '<div class="ui-widget ui-corner-all">' +
-                            '<table id="table-' + data + '">' +
-                            '                               ' +
-                            '</table>' +
+                            '<div class="ui-widget ui-corner-all" id="table-' + data + '">' +
+                            
                             '<input id="name_new_card-' + data + '" class="form-control" type="text" placeholder="Name"/>' +
-                            '<input id="description-' + data + '" class="form-control" type="text" placeholder="Description"/>' +
-                            '<input id="' + data + '" class="create_card btn" type="button"  value="Create Card"/>' +
+                            //'<input id="description-' + data + '" class="form-control" type="text" placeholder="Description"/>' +
+                            '<input id="' + data + '" class="create_card btn" type="button"  value="New"/>' +
                             '</div >' +
                             '</div >' +
                             '</article >' +
@@ -49,7 +47,7 @@
                     }
                 })
             }
-        });
+    });
 
     $('#results').on('click', '.create_card', function () {
             var id = $(this).attr("id");
@@ -59,28 +57,44 @@
                 $.ajax({
                     url: '/Card/Create/?name=' + name + '&id=' + id + '&description=' + description,
                     success: function (data) {
-                        var result = '<tr id="card-' + data + '">' +
-                            '<th>' + name + ': </th>' +
-                            '<th>' + description + '</th>' +
-                            '</tr>';
+                        var result = '<div class="col-xs-10" id="card-' + data +'"  >' +
+                            '<input id="data" type="text" class="form-control" value="' + name + '" /></div>' +
+                            '<div class="col-xs-2" id="card-' + data + '"><a><i id="' + data + '" class="pe-7f-close delete_card"></i></a></div> <br id="card-' + data + '" /> <br id="card-' + data + '" />';
 
-                        $('#table-' + id).append(result);
+                        $('.name_new_card-' + id).before(result);
                     }
                 })
             }
         });
 
     $('#results').on('click', '.delete_list', function () {
-        var listId = $(".delete_list").attr("id");
-        var id = $(".main-header").attr("id");
-        $.ajax({
-            url: '/TaskList/Delete/?id=' + id + '&listId=' + listId,
-            success: function (data) {
-                if (data == 0) {
-                    $(".taskList-" + listId).remove();
+        if (confirm('Are you sure you want to remove this list into the board?')) {
+            var listId = $(this).attr("id");
+            $.ajax({
+                url: '/TaskList/Delete/?listId=' + listId,
+                success: function (data) {
+                    if (data == 0) {
+                        $(".taskList-" + listId).remove();
+                    }
                 }
-            }
-        })
+            })
+        }
     });
     
+    $('#results').on('click', '.delete_card', function () {
+        if (confirm('Are you sure you want to remove this card into the list?')) {
+            var cardId = $(this).attr("id");
+            $.ajax({
+                url: '/Card/Delete/?cardId=' + cardId,
+                success: function (data) {
+                    if (data == 0) {
+                        $("#card-" + cardId).remove();
+                        $("#card-" + cardId).remove();
+                        $("#card-" + cardId).remove();
+                        $("#card-" + cardId).remove();
+                    }
+                }
+            })
+        }
+    })
 });

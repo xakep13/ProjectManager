@@ -19,28 +19,26 @@
                         <i class="pe-7f-menu pe-rotate-90"></i><h3>@list.Name</h3>
                     </div>
                     <div class="widget__config">
-                        <a ><i id="@list.Id" class="pe-7f-target delete_list"></i></a>
+                        <a ><i id="@list.Id" class="pe-7s-close delete_list"></i></a>
                     </div>
                 </header>
 
                 <div class="widget__content widget__grid filled pad20">
-                    <div class="ui-widget ui-corner-all">
-                        <table id="table-@list.Id">
+                    <div class="ui-widget ui-corner-all" id="table-@list.Id">
+                        @foreach (CardViewModel card in list.Cards)
+                        {
+                            <div class="col-xs-10" id="card-@card.Id">
+                                <input  type="text" class="form-control" value="@card.Name" />
+                            </div>
+                            <div class="col-xs-2" id="card-@card.Id"><a><i id="@card.Id" class="pe-7f-close delete_card"></i></a></div><br id="card-@card.Id" /><br id="card-@card.Id" />
+                        }
 
-                            @foreach (CardViewModel card in list.Cards)
-                            {
-                                <tr id="card-@card.Id">
-                                    <th>@card.Name : </th>
-                                    <th>@card.Description</th>
-                                </tr>
-
-                            }
-                        </table>
-
-                        <input id="name_new_card-@list.Id" class="form-control" type="text" placeholder="Name" />
-                        <input id="description-@list.Id" type="text" class="form-control" placeholder="Description" />
-
-                        <input id="@list.Id" class="create_card btn" type="button" value="Create Card" />
+                        <br class="name_new_card-@list.Id" /><div class="col-xs-9 ">
+                            <input id="name_new_card-@list.Id" class="form-control" type="text" placeholder="Name" />
+                        </div>
+                        <div class="col-xs-3">
+                            <input id="@list.Id" class="create_card btn" type="button" value="New" />
+                        </div><br />
                     </div>
                 </div>
             </article>

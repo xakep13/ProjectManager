@@ -33,16 +33,12 @@ namespace ProjectManager.Controllers
 
         }
 
-        public int Delete(int id, CardViewModel data)
+        public int Delete(int cardId)
         {
             var map = mapper.CreateMapper();
-            TaskListDTO taskList = TaskListService.Get(id);
-            CardDTO card = map.Map<CardDTO>(data);
-            taskList.Cards.Remove(card);
-            int j = TaskListService.Update(taskList);
+            CardDTO card = CardService.Get(cardId);
             int i = CardService.Delete(card);
 
-            if (i != -1 && j != -1) ; //to do something
             return i;
         }
     }

@@ -35,10 +35,10 @@ namespace ProjectManager.Controllers
             return i;
         }
 
-        public int Delete(int id, int listId)
+        public int Delete(int listId)
         {
             var map = mapper.CreateMapper();
-            BoardDTO board = BoardService.Get(id);
+
             TaskListDTO taskList = TaskListService.Get(listId);
 
 
