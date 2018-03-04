@@ -32,8 +32,18 @@ namespace ProjectManager.DAL.Repositories
         public virtual void Delete(int Id)
         {
             Board item = Database.Board.Include(x => x.TaskLists.Select(y => y.Cards)).First(x=>x.Id==Id);
-
-            if (item != null) Database.Board.Remove(item);
+            if (item != null)
+            {
+                foreach (TaskList list in item.TaskLists.ToList())
+                {
+                    foreach (Card card in list.Cards.ToList())
+                    {
+                        Database.Card.Remove(card);
+                    }
+                    Database.TaskList.Remove(list);
+                }
+                Database.Board.Remove(item);
+            }
         }
 
         public virtual void Update(Board item)

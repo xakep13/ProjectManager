@@ -22,14 +22,10 @@ namespace ProjectManager.Controllers
             return i;
         }
 
-        public int Delete(string id, BoardViewModel data)
+        public int Delete(int boardId)
         {
             var map = mapper.CreateMapper();
-
-            UserDTO user = UserService.GetById(id);
-            BoardDTO board = map.Map<BoardDTO>(data);
-            user.Boards.Remove(board);
-            //int j = UserService.Update(user);
+            BoardDTO board = BoardService.Get(boardId);
             int i = BoardService.Delete(board);
             return i;
         }

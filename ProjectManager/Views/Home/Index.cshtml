@@ -15,17 +15,17 @@
                 <ul class="main-nav__submenu">
                 @foreach (BoardViewModel board in Model)
                 {
-                    <li>
-                        @Ajax.ActionLink(board.Name, "GetBoard", "Board", new { id = board.Id }, new AjaxOptions { UpdateTargetId = "results" }, new { @id = "board-"+board.Id })
+                    <li class="col-xs-10 board-@board.Id">                     
+                            @Ajax.ActionLink(board.Name, "GetBoard", "Board", new { id = board.Id }, new AjaxOptions { UpdateTargetId = "results" }, new { @id = "board-"+board.Id })                      
                     </li>
+                    <a><li class="col-xs-2"><i id="@board.Id" class="pe-7s-close delete_board"></i></li></a>
                 }
                     <li class="qwerty">
                        <div class="col-xs-8">
                            <input class="form-control new_board_name" placeholder="Name"  type="text">
                        </div>  
                         <div class="col-xs-4">
-
-                           <input type="button" value="New" class="create_new_board  btn" />
+                           <input type="button" value="New" class="create_board  btn" />
                         </div>
                     </li>
                 </ul>

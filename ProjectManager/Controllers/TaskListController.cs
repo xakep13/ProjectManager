@@ -16,15 +16,10 @@ namespace ProjectManager.Controllers
         public int Create(string name, int id)
         {
             var map = mapper.CreateMapper();
-
             BoardDTO board = BoardService.Get(id);
             TaskListDTO taskList = new TaskListDTO {Name = name , BoardId = board.Id};
-
             int i = taskList.Id = TaskListService.Create(taskList);
-
-
-                return i;
-
+            return i;
         }
 
         public int Update(TaskListViewModel data)
@@ -38,13 +33,8 @@ namespace ProjectManager.Controllers
         public int Delete(int listId)
         {
             var map = mapper.CreateMapper();
-
             TaskListDTO taskList = TaskListService.Get(listId);
-
-
-            int i = TaskListService.Delete(taskList);
-
-           
+            int i = TaskListService.Delete(taskList);          
             return i;
         }
     }
