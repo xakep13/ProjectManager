@@ -9,24 +9,7 @@
     <link href="~/Content/bootstrap.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-    <header class="top-bar">
-        <ul class="profile"></ul>
-        <div class="main-search">
-            <input placeholder="Search ..." id="msearch" value="" type="text">
-            <label for="msearch">
-                <i class="pe-7s-search"></i>
-            </label>
-            <button>
-                <i class="pe-7g-arrow-circled pe-rotate-90"></i>
-            </button>
-        </div>
-
-        <div class="main-brand">
-            <div class="main-brand__container">
-               <a class="btn dark" href="@Url.Action("Logout","Account")">Вийти, @User.Identity.Name</a>               
-            </div>
-        </div>
-    </header>     
+      
     @RenderBody()   
 
     @Scripts.Render("~/bundles/jquery")

@@ -8,5 +8,7 @@ namespace ProjectManager.BLL.Interfaces
         IEnumerable<BoardDTO> GetAll(string id);
         int Create(BoardDTO boardDTO, string v);
         BoardDTO GetByUserId(int id, string v);
+        int AddUser(BoardDTO board, UserDTO user);
+        int RemoveUser(BoardDTO board, UserDTO user);
     }
 }

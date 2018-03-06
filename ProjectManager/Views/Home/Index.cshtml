@@ -3,6 +3,23 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<header class="top-bar">
+    <ul class="profile"></ul>
+
+
+    <div class="main-search">
+        <input placeholder="Search ..." id="msearch" name="name"  value="" type="text" autocomplete="off">
+        <label for="msearch"><i class="pe-7s-search"></i></label>
+        <div class="result" ></div>
+    </div>
+    
+
+    <div class="main-brand">
+        <div class="main-brand__container">
+            <a class="btn dark" href="@Url.Action("Logout","Account")">Вийти, @User.Identity.Name</a>
+        </div>
+    </div>
+</header>   
 
 <div class="wrapper">
     <aside class="sidebar">
@@ -10,7 +27,7 @@
             <li class="main-nav--collapsible">
                 <a class="main-nav__link" >
                     <span class="main-nav__icon"><i class="pe-7f-home"></i></span> Dashboard
-                    <span class="badge badge--line badge--blue">@Model.Count()</span>
+                    <span id="@Model.Count()" class="badge count badge--line badge--blue">@Model.Count()</span>
                 </a>
                 <ul class="main-nav__submenu">
                 @foreach (BoardViewModel board in Model)

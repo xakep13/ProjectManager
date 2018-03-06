@@ -1,0 +1,17 @@
+﻿@model IEnumerable<ProjectManager.BLL.DTO.UserDTO>
+
+
+<table class="table" >
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Login)
+        </td>
+        <td>
+            <input type="button" value="add" class=".add_user" id="@item.Id" />
+        </td>
+    </tr>
+}
+
+</table>

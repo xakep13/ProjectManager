@@ -15,5 +15,6 @@ namespace ProjectManager.BLL.Interfaces
         Task<ClaimsIdentity>        Authenticate(UserDTO userDto);
         Task                        SetInitialData(UserDTO adminDto, List<string> roles);
         UserDTO                     GetById(string id);
+        List<UserDTO> GetAll();
     }
 }

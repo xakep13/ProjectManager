@@ -22,12 +22,17 @@ namespace ProjectManager.DAL.Repositories
         }
         public  ClientProfile GetById(string id)
         {
-            return Database.User.Include(x => x.Boards.Select(w => w.TaskLists.Select(q => q.Cards))).First(x => x.Id == id);
+            return Database.User.Include(x => x.Boards.Select(w => w.Users.Select(q => q.Boards.Select(z => z.TaskLists.Select(v => v.Cards))))).First(b => b.Id == id);
         }
 
         public void Dispose()
         {
             Database.Dispose();
+        }
+
+        public object GetAll()
+        {
+            return Database.User.ToList();
         }
     }
 }

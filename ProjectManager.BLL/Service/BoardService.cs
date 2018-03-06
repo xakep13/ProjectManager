@@ -107,5 +107,33 @@ namespace ProjectManager.BLL.Service
         {
             throw new NotImplementedException();
         }
+
+        public int AddUser(BoardDTO board, UserDTO user)
+        {
+            if (board != null && user != null)
+            {
+                var map = mapper.CreateMapper();
+                Board _board = Database.Boards.Get(board.Id);
+                ClientProfile _user = Database.Users.GetById(user.Id);
+                _board.Users.Add(_user);
+                Database.Save();
+                return _board.Id;
+            }
+            return -1;
+        }
+
+        public int RemoveUser(BoardDTO board, UserDTO user)
+        {
+            if (board != null && user != null)
+            {
+                var map = mapper.CreateMapper();
+                Board _board = Database.Boards.Get(board.Id);
+                ClientProfile _user = Database.Users.GetById(user.Id);
+                _board.Users.Remove(_user);
+                Database.Save();
+                return _board.Id;
+            }
+            return -1;
+        }
     }
 }

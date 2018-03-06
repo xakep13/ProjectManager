@@ -22,6 +22,21 @@ namespace ProjectManager.Controllers
             IEnumerable<BoardViewModel> myboard = map.Map<IEnumerable<BoardViewModel>>(board);
 
             return View(myboard);
-        } 
+        }
+
+        public object Search(string name)
+        {
+            if (name.Length > 2)
+            {
+                var map = mapper.CreateMapper();
+                List<UserDTO> users = UserService.GetAll().Where(a => a.Login.Contains(name)).ToList();
+                if (users.Count <= 0)
+                {
+                    return null;
+                }
+                return PartialView("Search", users);
+            }
+            return null;
+        }
     }
 }

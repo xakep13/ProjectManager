@@ -1,5 +1,33 @@
 ﻿$(document).ready(function () {
 
+    $('body').on('click', '.add_user', function () {
+        var boardId = $('.main-header').attr('id');
+        var userId = $(this).attr("id");
+        $.ajax({
+            url: '/Board/AddUser/?boardId=' + boardId+'&userid='+userId,
+            success: function (data) {
+                if (data == 1) {
+                    location.reload();
+                }
+                alert("something wrong!");
+            }
+        });
+    }); 
+
+    $('body').on('click', '.remove_user', function () {
+        var boardId = $('.main-header').attr('id');
+        var userId = $(this).attr("id");
+        $.ajax({
+            url: '/Board/RemoveUser/?boardId=' + boardId + '&userid=' + userId,
+            success: function (data) {
+                if (data == 1) {
+                    location.reload();
+                }
+                alert("something wrong!");
+            }
+        });
+    });
+
     $('.wrapper').on('click', '.create_board', function () {
         var name = $(".new_board_name").val();
         if (name.length > 1) {
@@ -11,24 +39,28 @@
                                  '</li>' +
                                     '<a><li class="col-xs-2"><i id="' + data + '" class="pe-7s-close delete_board"></i></li></a>'
                     $(".qwerty").before(result);
+                    location.reload();
                 }
             })
         }
     });
 
     $('.wrapper').on('click', '.delete_board', function () {
-        if (confirm('Are you sure you want to remove this board?')) {
-            var boardId = $(this).attr("id");
-            $.ajax({
-                url: '/Board/Delete/?boardId=' + boardId,
-                success: function (data) {
-                    if (data == 0) {
-                        $('.board-' + boardId).remove();
-                        location.reload();
+        var count = $('.count').attr('id');
+        if (count > 1) {
+            if (confirm('Are you sure you want to remove this board?')) {
+                var boardId = $(this).attr("id");
+                $.ajax({
+                    url: '/Board/Delete/?boardId=' + boardId,
+                    success: function (data) {
+                        if (data == 0) {
+                            $('.board-' + boardId).remove();
+                            location.reload();
+                        }
                     }
-                }
-            })
-        }
+                })
+            }
+        } else alert("You can't delete last board");
     });
 
     $('#results').on('click', '.create_list', function () {
@@ -50,10 +82,11 @@
                         '</header >' +
                         '<div class="widget__content widget__grid filled pad20">' +
                         '<div class="ui-widget ui-corner-all" id="table-' + data + '">' +
-
+                        '<br class="name_new_card-' + data + '" /><div class="col-xs-9 ">'+
                         '<input id="name_new_card-' + data + '" class="form-control" type="text" placeholder="Name"/>' +
-                        //'<input id="description-' + data + '" class="form-control" type="text" placeholder="Description"/>' +
+                        '</div><div class="col-xs-3">'+
                         '<input id="' + data + '" class="create_card btn" type="button"  value="New"/>' +
+                        '</div><br />'+
                         '</div >' +
                         '</div >' +
                         '</article >' +
@@ -74,7 +107,7 @@
                 url: '/Card/Create/?name=' + name + '&id=' + id + '&description=' + description,
                 success: function (data) {
                     var result = '<div class="col-xs-10" id="card-' + data + '"  >' +
-                        '<input id="data" type="text" class="form-control" value="' + name + '" /></div>' +
+                        '<input id="data" type="text" readonly class="form-control" value="' + name + '" /></div>' +
                         '<div class="col-xs-2" id="card-' + data + '"><a><i id="' + data + '" class="pe-7f-close delete_card"></i></a></div> <br id="card-' + data + '" /> <br id="card-' + data + '" />';
 
                     $('.name_new_card-' + id).before(result);
@@ -112,4 +145,16 @@
             })
         }
     });
+
+    $("#msearch").on("keyup", function () {
+        var name = $(this).val();
+        $.ajax({
+            url: '/Home/Search/?name=' + name,
+            success: function (data) {
+                $('.result').empty();
+                $(".result").append(data);
+            }
+        })
+    });
+
 });

@@ -108,5 +108,11 @@ namespace ProjectManager.BLL.Service
 
             return map.Map<UserDTO>(Database.Users.GetById(id));
         }
+
+        public List<UserDTO> GetAll()
+        {
+            var map = mapper.CreateMapper();
+            return map.Map<List<UserDTO>>(Database.Users.GetAll());
+        }
     }
 }

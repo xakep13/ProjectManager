@@ -3,6 +3,7 @@ using ProjectManager.BLL.Interfaces;
 using ProjectManager.BLL.DTO;
 using Microsoft.AspNet.Identity;
 using ProjectManager.Models;
+using System.Collections.Generic;
 
 namespace ProjectManager.Controllers
 {
@@ -46,6 +47,28 @@ namespace ProjectManager.Controllers
             BoardViewModel myboard = map.Map<BoardViewModel>(board);
 
             return PartialView("GetBoard", map.Map<BoardViewModel>(myboard));
+        }
+
+        public int AddUser(int boardId, string userId)
+        {
+            var map = mapper.CreateMapper();
+            BoardDTO board = BoardService.Get(boardId);
+            UserDTO user = UserService.GetById(userId);
+            int i =  BoardService.AddUser(board, user);
+   
+            if (i > 0) return 1;
+            else return -1;
+        }
+
+        public int RemoveUser(int boardId, string userId)
+        {
+            var map = mapper.CreateMapper();
+            BoardDTO board = BoardService.Get(boardId);
+            UserDTO user = UserService.GetById(userId);
+            int i = BoardService.RemoveUser(board, user);
+
+            if (i > 0) return 1;
+            else return -1;
         }
     }
 }

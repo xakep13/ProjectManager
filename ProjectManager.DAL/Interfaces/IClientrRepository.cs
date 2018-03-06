@@ -8,5 +8,6 @@ namespace ProjectManager.DAL.Interfaces
     {
         void Create(ClientProfile item);
         ClientProfile GetById(string id);
+        object GetAll();
     }
 }
