@@ -1,4 +1,5 @@
 ﻿@using ProjectManager.Models
+@using Microsoft.AspNet.Identity
 @model ProjectManager.Models.BoardViewModel
 
 <header class="main-header" id="@Model.Id">
@@ -9,16 +10,23 @@
         </h1>
 
             <table>
-            @foreach (var user in Model.Users){
+            @foreach (var user in Model.Users)
+            {
               <tr>
                   <td>
                       @user.Login
                   </td>
                   <td>
+                      @if (!(user.Id == User.Identity.GetUserId()))
+                      {
                       <input type="button" value="remove" class="remove_user" id="@user.Id" />
+                      }
+                      else
+                      {
+                        <input type="button" value=": admin" id="@user.Id" />
+                      }                    
                   </td>
               </tr>
-
             }
            </table>
             
@@ -58,7 +66,7 @@
         </div>
     }
     <div class=" col-md-2" id="name_new_list_">
-    <input id="name_new_list" class="form-control" type="text" />
-    <input type="button" class="btn create_list" value="Create List" />
+        <input id="name_new_list" class="form-control" type="text" />
+        <input type="button" class="btn create_list" value="Create List" />
     </div>
 </div>

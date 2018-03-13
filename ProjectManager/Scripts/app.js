@@ -8,8 +8,9 @@
             success: function (data) {
                 if (data == 1) {
                     location.reload();
+                } else {
+                    alert("something wrong!");
                 }
-                alert("something wrong!");
             }
         });
     }); 
@@ -22,8 +23,9 @@
             success: function (data) {
                 if (data == 1) {
                     location.reload();
+                } else {
+                    alert("something wrong!");
                 }
-                alert("something wrong!");
             }
         });
     });
@@ -98,6 +100,20 @@
         }
     });
 
+    $('#results').on('click', '.delete_list', function () {
+        if (confirm('Are you sure you want to remove this list into the board?')) {
+            var listId = $(this).attr("id");
+            $.ajax({
+                url: '/TaskList/Delete/?listId=' + listId,
+                success: function (data) {
+                    if (data == 0) {
+                        $(".taskList-" + listId).remove();
+                    }
+                }
+            })
+        }
+    });
+
     $('#results').on('click', '.create_card', function () {
         var id = $(this).attr("id");
         var name = $("#name_new_card-" + id).val();
@@ -111,20 +127,6 @@
                         '<div class="col-xs-2" id="card-' + data + '"><a><i id="' + data + '" class="pe-7f-close delete_card"></i></a></div> <br id="card-' + data + '" /> <br id="card-' + data + '" />';
 
                     $('.name_new_card-' + id).before(result);
-                }
-            })
-        }
-    });
-
-    $('#results').on('click', '.delete_list', function () {
-        if (confirm('Are you sure you want to remove this list into the board?')) {
-            var listId = $(this).attr("id");
-            $.ajax({
-                url: '/TaskList/Delete/?listId=' + listId,
-                success: function (data) {
-                    if (data == 0) {
-                        $(".taskList-" + listId).remove();
-                    }
                 }
             })
         }
@@ -156,5 +158,4 @@
             }
         })
     });
-
 });

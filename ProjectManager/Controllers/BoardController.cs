@@ -15,11 +15,8 @@ namespace ProjectManager.Controllers
         public int Create(string name)
         {
             var map = mapper.CreateMapper();
-
             BoardDTO boardDTO = new BoardDTO { Name = name };
-
             int i = boardDTO.Id = BoardService.Create(boardDTO, User.Identity.GetUserId());
-
             return i;
         }
 
@@ -34,18 +31,16 @@ namespace ProjectManager.Controllers
         public int Update(BoardViewModel data)
         {
             var map = mapper.CreateMapper();
-
             BoardDTO board = map.Map<BoardDTO>(data);
             int i = BoardService.Update(board);
             return i;
         }
-
+        [HttpGet]
         public ActionResult GetBoard(int id)
         {
             var map = mapper.CreateMapper();
             BoardDTO board = BoardService.GetByUserId(id, User.Identity.GetUserId());
             BoardViewModel myboard = map.Map<BoardViewModel>(board);
-
             return PartialView("GetBoard", map.Map<BoardViewModel>(myboard));
         }
 
@@ -54,8 +49,7 @@ namespace ProjectManager.Controllers
             var map = mapper.CreateMapper();
             BoardDTO board = BoardService.Get(boardId);
             UserDTO user = UserService.GetById(userId);
-            int i =  BoardService.AddUser(board, user);
-   
+            int i =  BoardService.AddUser(board, user); 
             if (i > 0) return 1;
             else return -1;
         }
@@ -66,7 +60,6 @@ namespace ProjectManager.Controllers
             BoardDTO board = BoardService.Get(boardId);
             UserDTO user = UserService.GetById(userId);
             int i = BoardService.RemoveUser(board, user);
-
             if (i > 0) return 1;
             else return -1;
         }
