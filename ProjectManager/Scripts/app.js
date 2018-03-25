@@ -3,6 +3,7 @@
     $('body').on('click', '.add_user', function () {
         var boardId = $('.main-header').attr('id');
         var userId = $(this).attr("id");
+        console.log("hello");
         $.ajax({
             url: '/Board/AddUser/?boardId=' + boardId+'&userid='+userId,
             success: function (data) {
@@ -18,6 +19,7 @@
     $('body').on('click', '.remove_user', function () {
         var boardId = $('.main-header').attr('id');
         var userId = $(this).attr("id");
+        console.log("hello");
         $.ajax({
             url: '/Board/RemoveUser/?boardId=' + boardId + '&userid=' + userId,
             success: function (data) {

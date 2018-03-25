@@ -1049,7 +1049,7 @@ hr { height: 1px; border: medium none; background-color: rgba(255, 255, 255, 0.4
 .main-brand__container { position: absolute; right: 50px; }
 .main-brand__container .swtc { margin-top: 19px; }
 .main-logo { display: inline-block; vertical-align: top; margin-right: 7px; }
-.main-search { position: absolute; padding-left: 70px; left: 261px; top: 0px; background-color: rgba(0, 0, 0, 0.25); }
+.main-search {z-index:1; position: absolute; padding-left: 70px; left: 261px; top: 0px; background-color: rgba(0, 0, 0, 0.25); }
 .main-search input, .main-search label { height: 63px; color: rgb(229, 229, 229); }
 .main-search input { border: medium none; background-color: transparent; width: 313px; font-weight: 100; font-size: 16px; padding-right: 65px; }
 .main-search input:focus:-moz-placeholder { opacity: 0.3; }
