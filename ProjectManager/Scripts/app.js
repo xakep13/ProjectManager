@@ -1,163 +1,614 @@
-﻿$(document).ready(function () {
-
-    $('body').on('click', '.add_user', function () {
-        var boardId = $('.main-header').attr('id');
-        var userId = $(this).attr("id");
-        console.log("hello");
-        $.ajax({
-            url: '/Board/AddUser/?boardId=' + boardId+'&userid='+userId,
-            success: function (data) {
-                if (data == 1) {
-                    location.reload();
-                } else {
-                    alert("something wrong!");
-                }
-            }
-        });
-    }); 
-
-    $('body').on('click', '.remove_user', function () {
-        var boardId = $('.main-header').attr('id');
-        var userId = $(this).attr("id");
-        console.log("hello");
-        $.ajax({
-            url: '/Board/RemoveUser/?boardId=' + boardId + '&userid=' + userId,
-            success: function (data) {
-                if (data == 1) {
-                    location.reload();
-                } else {
-                    alert("something wrong!");
-                }
-            }
-        });
-    });
-
-    $('.wrapper').on('click', '.create_board', function () {
-        var name = $(".new_board_name").val();
-        if (name.length > 1) {
-            $.ajax({
-                url: '/Board/Create/?name=' + name,
-                success: function (data) {
-                    var result = '<li class="col-xs-10 board-' + data + '">' +
-                                    '<a data-ajax="true" data-ajax-mode="replace" id="board-' + data + '" data-ajax-update="#results" href="/Board/GetBoard/' + data + '">' + name + '</a>' +
-                                 '</li>' +
-                                    '<a><li class="col-xs-2"><i id="' + data + '" class="pe-7s-close delete_board"></i></li></a>'
-                    $(".qwerty").before(result);
-                    location.reload();
-                }
-            })
-        }
-    });
-
-    $('.wrapper').on('click', '.delete_board', function () {
-        var count = $('.count').attr('id');
-        if (count > 1) {
-            if (confirm('Are you sure you want to remove this board?')) {
-                var boardId = $(this).attr("id");
-                $.ajax({
-                    url: '/Board/Delete/?boardId=' + boardId,
-                    success: function (data) {
-                        if (data == 0) {
-                            $('.board-' + boardId).remove();
-                            location.reload();
-                        }
-                    }
-                })
-            }
-        } else alert("You can't delete last board");
-    });
-
-    $('#results').on('click', '.create_list', function () {
-        var id = $(".main-header").attr("id");
-        var name = $("#name_new_list").val();
-        if (name.length > 1) {
-            $.ajax({
-                url: '/TaskList/Create/?name=' + name + '&id=' + id,
-                success: function (data) {
-                    var result = '<div class="col-md-3 taskList-' + data + '" id="' + data + '">' +
-                        '<article class="widget">' +
-                        '<header class="widget__header one-btn">' +
-                        '<div class="widget__title">' +
-                        '<i class="pe-7f-menu pe-rotate-90"></i><h3>' + name + '</h3>' +
-                        '</div>' +
-                        '<div class="widget__config" >' +
-                        '<a ><i id="' + data + '" class="pe-7s-close delete_list"></i></a>' +
-                        '</div >' +
-                        '</header >' +
-                        '<div class="widget__content widget__grid filled pad20">' +
-                        '<div class="ui-widget ui-corner-all" id="table-' + data + '">' +
-                        '<br class="name_new_card-' + data + '" /><div class="col-xs-9 ">'+
-                        '<input id="name_new_card-' + data + '" class="form-control" type="text" placeholder="Name"/>' +
-                        '</div><div class="col-xs-3">'+
-                        '<input id="' + data + '" class="create_card btn" type="button"  value="New"/>' +
-                        '</div><br />'+
-                        '</div >' +
-                        '</div >' +
-                        '</article >' +
-                        '</div >';
-
-                    $("#name_new_list_").before(result);
-                }
-            })
-        }
-    });
-
-    $('#results').on('click', '.delete_list', function () {
-        if (confirm('Are you sure you want to remove this list into the board?')) {
-            var listId = $(this).attr("id");
-            $.ajax({
-                url: '/TaskList/Delete/?listId=' + listId,
-                success: function (data) {
-                    if (data == 0) {
-                        $(".taskList-" + listId).remove();
-                    }
-                }
-            })
-        }
-    });
-
-    $('#results').on('click', '.create_card', function () {
-        var id = $(this).attr("id");
-        var name = $("#name_new_card-" + id).val();
-        var description = $("#description-" + id).val();
-        if (name.length > 1) {
-            $.ajax({
-                url: '/Card/Create/?name=' + name + '&id=' + id + '&description=' + description,
-                success: function (data) {
-                    var result = '<div class="col-xs-10" id="card-' + data + '"  >' +
-                        '<input id="data" type="text" readonly class="form-control" value="' + name + '" /></div>' +
-                        '<div class="col-xs-2" id="card-' + data + '"><a><i id="' + data + '" class="pe-7f-close delete_card"></i></a></div> <br id="card-' + data + '" /> <br id="card-' + data + '" />';
-
-                    $('.name_new_card-' + id).before(result);
-                }
-            })
-        }
-    });
+﻿
+(function ($, window, document, undefined) {
     
-    $('#results').on('click', '.delete_card', function () {
-        if (confirm('Are you sure you want to remove this card into the list?')) {
-            var cardId = $(this).attr("id");
+
+    var hasTouch = 'ontouchstart' in document;
+    var hasPointerEvents = (function () {
+        var el = document.createElement('div'),
+            docEl = document.documentElement;
+        if (!('pointerEvents' in el.style)) {
+            return false;
+        }
+        el.style.pointerEvents = 'auto';
+        el.style.pointerEvents = 'x';
+        docEl.appendChild(el);
+        var supports = window.getComputedStyle && window.getComputedStyle(el, '').pointerEvents === 'auto';
+        docEl.removeChild(el);
+        return !!supports;
+    })();
+
+    var defaults = {
+        listNodeName: 'ol',
+        itemNodeName: 'li',
+        rootClass: 'dd',
+        listClass: 'dd-list',
+        itemClass: 'dd-item',
+        dragClass: 'dd-dragel',
+        handleClass: 'dd-handle',
+        collapsedClass: 'dd-collapsed',
+        placeClass: 'dd-placeholder',
+        noDragClass: 'dd-nodrag',
+        emptyClass: 'dd-empty',
+        expandBtnHTML: '<button data-action="expand" type="button">Expand</button>',
+        collapseBtnHTML: '<button data-action="collapse" type="button">Collapse</button>',
+        group: 0,
+        maxDepth: 1,
+        threshold: 20
+    };
+
+    function Plugin(element, options) {
+        this.w = $(document);
+        this.el = $(element);
+        this.options = $.extend({}, defaults, options);
+        this.init();
+    }
+
+    Plugin.prototype = {
+
+        init: function () {
+            var list = this;
+
+            list.reset();
+
+            list.el.data('nestable-group', this.options.group);
+
+            list.placeEl = $('<div class="' + list.options.placeClass + '"/>');
+
+            $.each(this.el.find(list.options.itemNodeName), function (k, el) {
+                list.setParent($(el));
+            });
+
+            list.el.on('click', 'button', function (e) {
+                if (list.dragEl) {
+                    return;
+                }
+                var target = $(e.currentTarget),
+                    action = target.data('action'),
+                    item = target.parent(list.options.itemNodeName);
+                if (action === 'collapse') {
+                    list.collapseItem(item);
+                }
+                if (action === 'expand') {
+                    list.expandItem(item);
+                }
+            });
+
+            var onStartEvent = function (e) {
+                var handle = $(e.target);
+                if (!handle.hasClass(list.options.handleClass)) {
+                    if (handle.closest('.' + list.options.noDragClass).length) {
+                        //my code
+                        
+                        return;
+                    }
+                    handle = handle.closest('.' + list.options.handleClass);
+                    
+                }
+
+                if (!handle.length || list.dragEl) {
+                    return;
+                }
+
+                list.isTouch = /^touch/.test(e.type);
+                if (list.isTouch && e.touches.length !== 1) {
+                    return;
+                }
+               
+                e.preventDefault();
+                list.dragStart(e.touches ? e.touches[0] : e);
+            };
+
+            var onMoveEvent = function (e) {
+                if (list.dragEl) {
+                    e.preventDefault();
+                    list.dragMove(e.touches ? e.touches[0] : e);                  
+                }
+                
+            };
+
+            var onEndEvent = function (e) {
+                if (list.dragEl) {
+                    e.preventDefault();
+                    list.dragStop(e.touches ? e.touches[0] : e);
+                    
+                }
+            };
+
+            if (hasTouch) {
+                list.el[0].addEventListener('touchstart', onStartEvent, false);
+                window.addEventListener('touchmove', onMoveEvent, false);
+                window.addEventListener('touchend', onEndEvent, false);
+                window.addEventListener('touchcancel', onEndEvent, false);
+            }
+
+            list.el.on('mousedown', onStartEvent);
+            list.w.on('mousemove', onMoveEvent);
+            list.w.on('mouseup', onEndEvent);
+
+        },
+
+        serialize: function () {
+            var data,
+                depth = 0,
+                list = this;
+            step = function (level, depth) {
+                var array = [],
+                    items = level.children(list.options.itemNodeName);
+                items.each(function () {
+                    var li = $(this),
+                        item = $.extend({}, li.data()),
+                        sub = li.children(list.options.listNodeName);
+                    if (sub.length) {
+                        item.children = step(sub, depth + 1);
+                    }
+                    array.push(item);
+                });
+                return array;
+            };
+            data = step(list.el.find(list.options.listNodeName).first(), depth);
+            return data;
+        },
+
+        serialise: function () {
+            return this.serialize();
+        },
+
+        reset: function () {
+            this.mouse = {
+                offsetX: 0,
+                offsetY: 0,
+                startX: 0,
+                startY: 0,
+                lastX: 0,
+                lastY: 0,
+                nowX: 0,
+                nowY: 0,
+                distX: 0,
+                distY: 0,
+                dirAx: 0,
+                dirX: 0,
+                dirY: 0,
+                lastDirX: 0,
+                lastDirY: 0,
+                distAxX: 0,
+                distAxY: 0
+            };
+            this.isTouch = false;
+            this.moving = false;
+            this.dragEl = null;
+            this.dragRootEl = null;
+            this.dragDepth = 0;
+            this.hasNewRoot = false;
+            this.pointEl = null;
+        },
+
+        expandItem: function (li) {
+            li.removeClass(this.options.collapsedClass);
+            li.children('[data-action="expand"]').hide();
+            li.children('[data-action="collapse"]').show();
+            li.children(this.options.listNodeName).show();
+        },
+
+        collapseItem: function (li) {
+            var lists = li.children(this.options.listNodeName);
+            if (lists.length) {
+                li.addClass(this.options.collapsedClass);
+                li.children('[data-action="collapse"]').hide();
+                li.children('[data-action="expand"]').show();
+                li.children(this.options.listNodeName).hide();
+            }
+        },
+
+        expandAll: function () {
+            var list = this;
+            list.el.find(list.options.itemNodeName).each(function () {
+                list.expandItem($(this));
+            });
+        },
+
+        collapseAll: function () {
+            var list = this;
+            list.el.find(list.options.itemNodeName).each(function () {
+                list.collapseItem($(this));
+            });
+        },
+
+        setParent: function (li) {
+            if (li.children(this.options.listNodeName).length) {
+                li.prepend($(this.options.expandBtnHTML));
+                li.prepend($(this.options.collapseBtnHTML));
+            }
+            li.children('[data-action="expand"]').hide();
+        },
+
+        unsetParent: function (li) {
+            li.removeClass(this.options.collapsedClass);
+            li.children('[data-action]').remove();
+            li.children(this.options.listNodeName).remove();
+        },
+
+        dragStart: function (e) {
+            var mouse = this.mouse,
+                target = $(e.target),
+                dragItem = target.closest(this.options.itemNodeName);
+
+            this.placeEl.css('height', dragItem.height());
+
+            mouse.offsetX = e.offsetX !== undefined ? e.offsetX : e.pageX - target.offset().left;
+            mouse.offsetY = e.offsetY !== undefined ? e.offsetY : e.pageY - target.offset().top;
+            mouse.startX = mouse.lastX = e.pageX;
+            mouse.startY = mouse.lastY = e.pageY;
+
+            this.dragRootEl = this.el;
+
+            this.dragEl = $(document.createElement(this.options.listNodeName)).addClass(this.options.listClass + ' ' + this.options.dragClass);
+            this.dragEl.css('width', dragItem.width());
+
+            dragItem.after(this.placeEl);
+            dragItem[0].parentNode.removeChild(dragItem[0]);
+            dragItem.appendTo(this.dragEl);
+
+            $(document.body).append(this.dragEl);
+            this.dragEl.css({
+                'left': e.pageX - mouse.offsetX,
+                'top': e.pageY - mouse.offsetY
+            });
+            // total depth of dragging item
+            var i, depth,
+                items = this.dragEl.find(this.options.itemNodeName);
+            for (i = 0; i < items.length; i++) {
+                depth = $(items[i]).parents(this.options.listNodeName).length;
+                if (depth > this.dragDepth) {
+                    this.dragDepth = depth;
+                }
+            }
+            $('.actions').prev().filter(".kanban__title").each(function (i, element) {
+                $(element).after(this.placeEl);
+            })
+        },
+
+        dragStop: function (e) {
+            var el = this.dragEl.children(this.options.itemNodeName).first();
+            el[0].parentNode.removeChild(el[0]);
+            this.placeEl.replaceWith(el);
+
+            // change position or list
+            var card_id = el[0].dataset.card;
+            var list_id = el[0].parentElement.dataset.list;
+            var card_index = $('ol[data-list=' + list_id + ']').find($('li[data-card=' + card_id + ']')).index();
+            //
+
+            this.dragEl.remove();
+            this.el.trigger('change');
+            if (this.hasNewRoot) {
+                this.dragRootEl.trigger('change');
+            }         
+            this.reset();   
+            $('.asist').remove();
+
+
+            var lists = [];
+            $('ol').each(function (index) {
+                var cards = [];
+                $(this).children().each(function (index) {
+                    if ($(this).hasClass('dd-item')) {
+                        cards.push($(this).data('card'));
+                    }
+                });
+                
+                lists.push({
+                    list: $(this).data('list'),
+                    cards: cards
+                });
+                
+            });
+
             $.ajax({
-                url: '/Card/Delete/?cardId=' + cardId,
+                url: '/TaskList/ChangePosition/',
+                type: "POST",
+                dataType: 'text',
+                data: "json=" + JSON.stringify( lists),
                 success: function (data) {
-                    if (data == 0) {
-                        for (var i = 0; i < 4; i++) {
-                            $("#card-" + cardId).remove();
+                    console.log(data);
+                }
+                
+            });
+ 
+        },
+
+        dragMove: function (e) {
+            var list, parent, prev, next, depth,
+                opt = this.options,
+                mouse = this.mouse;
+
+            this.dragEl.css({
+                'left': e.pageX - mouse.offsetX,
+                'top': e.pageY - mouse.offsetY
+            });
+
+            var items = $("ol:not(:has(>li)) ");
+            $(items).each(function () {
+                $('<li style="color: transparent; min-height: 0px; border: transparent;" class="dd-item asist"></li>')
+                    .insertBefore($(this).find(".actions_bt"));
+            });
+            
+            
+
+            // mouse position last events
+            mouse.lastX = mouse.nowX;
+            mouse.lastY = mouse.nowY;
+            // mouse position this events
+            mouse.nowX = e.pageX;
+            mouse.nowY = e.pageY;
+            // distance mouse moved between events
+            mouse.distX = mouse.nowX - mouse.lastX;
+            mouse.distY = mouse.nowY - mouse.lastY;
+            // direction mouse was moving
+            mouse.lastDirX = mouse.dirX;
+            mouse.lastDirY = mouse.dirY;
+            // direction mouse is now moving (on both axis)
+            mouse.dirX = mouse.distX === 0 ? 0 : mouse.distX > 0 ? 1 : -1;
+            mouse.dirY = mouse.distY === 0 ? 0 : mouse.distY > 0 ? 1 : -1;
+            // axis mouse is now moving on
+            var newAx = Math.abs(mouse.distX) > Math.abs(mouse.distY) ? 1 : 0;
+
+            // do nothing on first move
+            if (!mouse.moving) {
+                mouse.dirAx = newAx;
+                mouse.moving = true;
+                return;
+            }
+
+            // calc distance moved on this axis (and direction)
+            if (mouse.dirAx !== newAx) {
+                mouse.distAxX = 0;
+                mouse.distAxY = 0;
+            } else {
+                mouse.distAxX += Math.abs(mouse.distX);
+                if (mouse.dirX !== 0 && mouse.dirX !== mouse.lastDirX) {
+                    mouse.distAxX = 0;
+                }
+                mouse.distAxY += Math.abs(mouse.distY);
+                if (mouse.dirY !== 0 && mouse.dirY !== mouse.lastDirY) {
+                    mouse.distAxY = 0;
+                }
+            }
+            mouse.dirAx = newAx;
+
+            /**
+             * move horizontal
+             */
+            if (mouse.dirAx && mouse.distAxX >= opt.threshold) {
+                // reset move distance on x-axis for new phase
+                mouse.distAxX = 0;
+                prev = this.placeEl.prev(opt.itemNodeName);
+                
+                // increase horizontal level if previous sibling exists and is not collapsed
+                if (mouse.distX > 0 && prev.length && !prev.hasClass(opt.collapsedClass)) {
+                    // cannot increase level when item above is collapsed
+                    list = prev.find(opt.listNodeName).last();                   
+                    // check if depth limit has reached
+                    depth = this.placeEl.parents(opt.listNodeName).length;
+    
+                    if (depth + this.dragDepth <= opt.maxDepth) {
+                        // create new sub-level if one doesn't exist
+
+                        if (!list.length) {
+                            list = $('<' + opt.listNodeName + '/>').addClass(opt.listClass);
+                            list.append(this.placeEl);
+                            prev.append(list);
+                            this.setParent(prev);
+                        } else {
+                            // else append to next level up
+                            list = prev.children(opt.listNodeName).last();
+                            list.append(this.placeEl);
+                        }
+                    }
+                } 
+                
+                
+                // decrease horizontal level
+                if (mouse.distX < 0) {
+                    // we can't decrease a level if an item preceeds the current one
+                    next = this.placeEl.next(opt.itemNodeName);
+                    if (!next.length) {
+                        parent = this.placeEl.parent();
+                        this.placeEl.closest(opt.itemNodeName).after(this.placeEl);
+                        if (!parent.children().length) {
+                            this.unsetParent(parent.parent());
                         }
                     }
                 }
-            })
-        }
-    });
+            }
 
-    $("#msearch").on("keyup", function () {
-        var name = $(this).val();
+            var isEmpty = false;
+
+            // find list item under cursor
+            if (!hasPointerEvents) {
+                this.dragEl[0].style.visibility = 'hidden';
+            }
+            this.pointEl = $(document.elementFromPoint(e.pageX - document.body.scrollLeft, e.pageY - (window.pageYOffset || document.documentElement.scrollTop)));
+            if (!hasPointerEvents) {
+                this.dragEl[0].style.visibility = 'visible';
+            }
+            if (this.pointEl.hasClass(opt.handleClass)) {
+                this.pointEl = this.pointEl.parent(opt.itemNodeName);
+            }
+            if (this.pointEl.hasClass(opt.emptyClass)) {
+                isEmpty = true;
+            }
+            
+            else if (!this.pointEl.length || !this.pointEl.hasClass(opt.itemClass)) {
+                return;
+            }
+            
+
+            // find parent list of item under cursor
+            var pointElRoot = this.pointEl.closest('.' + opt.rootClass),
+                isNewRoot = this.dragRootEl.data('nestable-id') !== pointElRoot.data('nestable-id');
+
+            /**
+             * move vertical
+             */
+            if (!mouse.dirAx || isNewRoot || isEmpty) {
+                // check if groups match if dragging over new root
+                if (isNewRoot && opt.group !== pointElRoot.data('nestable-group')) {
+                    return;
+                }
+                // check depth limit
+                depth = this.dragDepth - 1 + this.pointEl.parents(opt.listNodeName).length;
+                if (depth > opt.maxDepth) {
+                    return;
+                }
+                var before = e.pageY < (this.pointEl.offset().top + this.pointEl.height() / 2);
+                parent = this.placeEl.parent();
+                
+                // if empty create new list to replace empty placeholder
+                if (isEmpty) {
+                    list = $(document.createElement(opt.listNodeName)).addClass(opt.listClass);
+                    list.append(this.placeEl);
+                    this.pointEl.replaceWith(list);
+                    
+                }
+                else if (before) {
+                    this.pointEl.before(this.placeEl);
+                }
+                else {
+                    this.pointEl.after(this.placeEl);
+                }
+                if (!parent.children().length) {
+                    this.unsetParent(parent.parent());
+                }
+                if (!this.dragRootEl.find(opt.itemNodeName).length) {
+                    this.dragRootEl.append('<div class="' + opt.emptyClass + '"/>');
+                }
+                // parent root list has changed
+                if (isNewRoot) {
+                    this.dragRootEl = pointElRoot;
+                    this.hasNewRoot = this.el[0] !== this.dragRootEl[0];                  
+                }
+            }
+        }
+
+    };
+
+    $.fn.nestable = function (params) {
+        var lists = this,
+            retval = this;
+
+        lists.each(function () {
+            var plugin = $(this).data("nestable");
+
+            if (!plugin) {
+                $(this).data("nestable", new Plugin(this, params));
+                $(this).data("nestable-id", new Date().getTime());
+            } else {
+                if (typeof params === 'string' && typeof plugin[params] === 'function') {
+                    retval = plugin[params]();
+                }
+            }
+        });
+
+        return retval || lists;
+    };
+    
+})(window.jQuery || window.Zepto, window, document);
+$(document).on('click', '.viewlist', function () {
+    $('ol.kanban').addClass('list')
+    $('ol.list').removeClass('kanban')
+    $('menu').addClass('list')
+    $('menu').removeClass('kanban')
+});
+$(document).on('click', '.viewkanban', function () {
+    $('ol.list').addClass('kanban')
+    $('ol.kanban').removeClass('list')
+    $('menu').addClass('kanban')
+    $('menu').removeClass('list')
+});
+$(document).on('click', '.create-new-list', function () {
+    var id = $(".dd").attr("id");
+    var name = $("#name_new_list").val();
+    console.log(id, name);
+    if (name.length > 1) {
         $.ajax({
-            url: '/Home/Search/?name=' + name,
-            success: function (data) {
-                $('.result').empty();
-                $(".result").append(data);
+            url: '/TaskList/Create/?name=' + name + '&id=' + id,
+            success: function (id) {
+                var result =
+                    '<ol class="kanban " data-list="' + id + '" style="height: 500px; overflow-y: scroll;">' +
+                    ' <i class="material-icons" style="float:right; cursor:pointer;">delete</i>'+
+                    '<div class="kanban__title" >' +
+                    '<h2><i class="material-icons">report_problem</i>' + name + '</h2>' +
+                    '</div >' +
+
+                    '<div class="actions">' +
+                    '<button class="addbutt" > <i class="material-icons">control_point</i>Add new</button >' +
+                    '</div >' +
+                    '</ol >';
+
+                $(".dd").append(result);
             }
         })
-    });
+    }
+    
 });
+$(document).on('click', '.delete_list', function () {
+    if (confirm('Are you sure you want to remove this list into the board?')) {
+        var listId = $(this).attr("id");
+        $.ajax({
+            url: '/TaskList/Delete/?listId=' + listId,
+            success: function (data) {
+                if (data == 0) {
+                    $('ol[data-list=' + listId + ']').remove();
+                }
+            }
+        })
+    }
+});
+$(document).on('click', '.create-new-card', function () {
+    var list_id = $(".id_of_list").val();
+    console.log(list_id);   
+    var name = $("#name_new_card").val();
+    $(".id_of_list").val('');
+    $(".name_new_card").val('');
+    var description = '';
+    if (name.length > 1) {
+        $.ajax({
+            url: '/Card/Create/?name=' + name + '&id=' + list_id + '&description=' + description,
+            success: function (id) {
+                var result =
+                    '<li class="dd-item" data-card="' + id + '">' +
+                    '<i class="material-icons delete_card" id="'+ id +'" style="float:right; cursor:pointer;">delete</i>'+
+                    '<h3 class="title dd-handle">' + name + '<i class=" material-icons ">filter_none</i></h3>' +
+                    '<div class="text" contenteditable="true">' + description + '</div>' +
+                    '<i class="material-icons" id="label blue">label</i><div class="actions">' +
+                    '<i class="material-icons" id="color">palette</i><i class="material-icons">edit</i><i class="material-icons">insert_link</i><i class="material-icons">attach_file</i>' +
+                    '</div>' +
+                    '</li>';
+                    $(result).insertBefore($('ol[data-list=' + list_id + ']').find($('.actions_bt')));
+                
+            }
+        })
+    }
+});
+$(document).on('click', '.delete_card', function () {
+    if (confirm('Are you sure you want to remove this card into the list?')) {
+        var cardId = $(this).attr("id");
+        $.ajax({
+            url: '/Card/Delete/?cardId=' + cardId,
+            success: function (data) {
+                if (data == 0) {
+                    for (var i = 0; i < 4; i++) {
+                        $('li[data-card=' + cardId + ']').remove();
+                    }
+                }
+            }
+        })
+    }
+});
+$(document).on('shown.bs.modal', '#newCardModal', function (event) {
+    var button = $(event.relatedTarget); 
+    var id = button.data('whatever');
+    var modal = $(this);
+    modal.find('.id_of_list').val(id);
+})
+

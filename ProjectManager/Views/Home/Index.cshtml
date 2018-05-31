@@ -1,62 +1,130 @@
-﻿@using ProjectManager.Models
-@model IEnumerable<BoardViewModel>
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<header class="top-bar">
-    <ul class="profile"></ul>
 
-
-    <div class="main-search">
-        <input placeholder="Search ..." id="msearch" name="name"  value="" type="text" autocomplete="off">
-        <label for="msearch"><i class="pe-7s-search"></i></label>
-        <div class="result" ></div>
-    </div>
-    
-
-    <div class="main-brand">
-        <div class="main-brand__container">
-            <a class="btn dark" href="@Url.Action("Logout","Account")">Вийти, @User.Identity.Name</a>
-        </div>
-    </div>
-</header>   
-
-<div class="wrapper">
-    <aside class="sidebar">
-        <ul class="main-nav">
-            <li class="main-nav--collapsible">
-                <a class="main-nav__link" >
-                    <span class="main-nav__icon"><i class="pe-7f-home"></i></span> Dashboard
-                    <span id="@Model.Count()" class="badge count badge--line badge--blue">@Model.Count()</span>
-                </a>
-                <ul class="main-nav__submenu">
-                @foreach (BoardViewModel board in Model)
-                {
-                    <li class="col-xs-10 board-@board.Id">                     
-                            @Ajax.ActionLink(board.Name, "GetBoard", "Board", new { id = board.Id }, new AjaxOptions { UpdateTargetId = "results" }, new { @id = "board-"+board.Id })                      
-                    </li>
-                    <a><li class="col-xs-2"><i id="@board.Id" class="pe-7s-close delete_board"></i></li></a>
-                }
-                    <li class="qwerty">
-                       <div class="col-xs-8">
-                           <input class="form-control new_board_name" placeholder="Name"  type="text">
-                       </div>  
-                        <div class="col-xs-4">
-                           <input type="button" value="New" class="create_board  btn" />
-                        </div>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </aside>
-    <section class="content">
-        <div id="results">
-            @Html.Partial("~/Views/Board/GetBoard.cshtml", Model.FirstOrDefault())
-        </div>
-    </section>
-</div>
 
 @section scripts{
-    <script type="text/javascript" src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+    
+    <script id="script" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js"></script>
+    <script type="text/template" id="list-template">
+        <div class="kanban__title">
+            <h1><i class="material-icons">check</i> <%- board.Name %></h1>
+        </div>
+        <div class="dd" id="<%- board.Id %>" style=" overflow: inherit; white-space: nowrap;">
+            <% board.TaskLists.forEach(function(list) { %>
+            <ol class="kanban " data-list="<%- list.Id %> " style="height: 500px; overflow-y: auto;">
+                <i class="material-icons delete_list" id="<%- list.Id %>" style="float:right; cursor:pointer;">delete</i>
+                <div class="kanban__title">
+                    <h2><i class="material-icons">report_problem</i><%- list.Name %></h2>
+                </div>
+                <% list.Cards.sort(function( a , b ) { return a.Position - b.Position }) %>
+                <% list.Cards.forEach(function(card) { %>
+                <li class="dd-item" data-card="<%- card.Id %>">
+                    <i class="material-icons delete_card" id="<%- card.Id %>" style="float:right; cursor:pointer;">delete</i>
+                    <h3 class="title dd-handle"><%- card.Name %><i class=" material-icons ">filter_none</i></h3>
+                    <div class="text" contenteditable="true"><%- card.Description %></div>
+                    <i class="material-icons" id="label blue">label</i><div class="actions">
+                        <i class="material-icons" id="color">palette</i><i class="material-icons">edit</i><i class="material-icons">insert_link</i><i class="material-icons">attach_file</i>
+                    </div>
+                </li>
+                <% }); %>
+                <div class="actions_bt">
+                    <button class="addbutt" data-toggle="modal" data-whatever="<%- list.Id %>" data-target="#newCardModal"><i class="material-icons">control_point</i>Add new</button>
+                </div>
+            </ol>
+            <% }); %>
+        </div>
+
+        <menu class="kanban">
+            <div class="dropdown">
+                <button class="dropbtn">List of boards</button>
+                <div class="dropdown-content">
+                    <% $.each(links, function() { var key = Object.keys(this)[0]; var value = this[key]; %>
+                    <a onclick="GetBoard(<%- key %>)"><%- value %></a>
+                    <% }); %>
+                </div>
+            </div>
+            <button><i class="material-icons">settings</i></button>
+            <button><i class="material-icons">chevron_left</i></button>
+            <button class="viewkanban"><i class="material-icons ">view_column</i></button>
+            <button class="viewlist"><i class="material-icons">view_list</i></button>
+            <button data-toggle="modal" data-target="#newListModal"><i class="material-icons">playlist_add</i> Add new Column</button>
+        </menu>
+
+        <!-- Modal for add new list -->
+        <div class="modal fade" id="newListModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add new board</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Name</p>
+                        <input type="text" class="input-group" id="name_new_list" placeholder="List" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success create-new-list" data-dismiss="modal">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal for add new card -->
+        <div class="modal fade" id="newCardModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add new card</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Name</p>
+                        <input type="text" class="input-group" id="name_new_card" placeholder="List" />
+                        <input type="text" class="id_of_list" style="display:none" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success create-new-card" data-dismiss="modal">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript">
+        GetBoard(0);
+        function GetBoard(id) {
+            var url = '?id=' + id;
+            $.ajax({
+                url: '/Home/GetBoard/' + url,
+                type: 'GET',
+                dataType: 'json',
+                success: function (board) {
+                    $.ajax({
+                        url: '/Home/GetListOfBoards/',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (links) {
+                            if (!Array.isArray(links)) {
+                                var l = [];
+                                l.push(links);
+                            } else {
+                                var l = links;
+                            }
+                            var tmpl = _.template(document.getElementById('list-template').innerHTML);
+                            var result = tmpl({
+                                board: board,
+                                links: l
+                            });
+                            $(result).insertBefore("#script");
+                            $('.dd').nestable('serialize');
+                        }
+                    });
+                }
+            });
+        }
+    </script>
     <script type="text/javascript" src="~/Scripts/app.js"></script>
+    
 }

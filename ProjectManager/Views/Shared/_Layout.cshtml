@@ -1,20 +1,17 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Board</title>
-    <link media="all" href="~/Content/index.css" type="text/css" rel="stylesheet">
-    <link href="~/Content/bootstrap.css" type="text/css" rel="stylesheet" />
-</head>
-<body>
-      
-    @RenderBody()   
+<html>
+    <head>
+        <link rel="stylesheet" href="~/Content/index.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    </head>
+    <body>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
-    @RenderSection("scripts", required: false)
-</body>
+        @RenderBody()
+
+        @Scripts.Render("~/bundles/jquery")
+
+        @RenderSection("scripts", required: false)
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    </body>
 </html>

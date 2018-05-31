@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity.Migrations;
 
 namespace ProjectManager.DAL.Repositories
 {
@@ -19,7 +20,7 @@ namespace ProjectManager.DAL.Repositories
 
         public virtual IEnumerable<object> Select(Func<T, object> predicate) => _dbset.Select(predicate).ToList();
 
-        public virtual IQueryable<T> Find(Func<T, bool> predicate) => _dbset.Where(predicate).AsQueryable<T>();
+        public virtual IQueryable<T> Find(Func<T, bool> predicate) => _dbset.AsNoTracking().Where(predicate).AsQueryable<T>();
 
         public virtual IQueryable<T> GetAll() => _dbset.ToList().AsQueryable<T>();
 
@@ -38,7 +39,8 @@ namespace ProjectManager.DAL.Repositories
 
         public virtual void Update(T item)
         {
-            _entities.Entry(item).State = EntityState.Modified;
+            _entities.Set<T>().AddOrUpdate(item);
+            //_entities.Entry(item).State = EntityState.Modified;
         }
 
         public virtual bool IfExist(int Id)

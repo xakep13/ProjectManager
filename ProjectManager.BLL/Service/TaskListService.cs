@@ -47,9 +47,9 @@ namespace ProjectManager.BLL.Service
             return map.Map<TaskListDTO>(Database.TaskLists.Get(id));
         }
 
-        public IEnumerable<TaskListDTO> GetAll(int id)
+        public IEnumerable<TaskListDTO> GetAll(int board_id)
         {
-            Board board = Database.Boards.Get(id);
+            Board board = Database.Boards.Get(board_id);
 
             var mapping = mapper.CreateMapper();
             return mapping.Map<IEnumerable<TaskListDTO>>(board.TaskLists);

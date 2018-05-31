@@ -40,10 +40,10 @@ namespace ProjectManager.BLL.Service
 
                 board.TaskLists.AddRange(new List<TaskList> { taskList1, taskList2, taskList3 });
 
-                Card card1 = new Card() {  Name = "Tet_card", Description = "new test card 1", TaskList = taskList1 };
-                Card card2 = new Card() {  Name = "Tet_card", Description = "new test card 2", TaskList = taskList1 };
-                Card card3 = new Card() {  Name = "Tet_card", Description = "new test card 3", TaskList = taskList2 };
-                Card card4 = new Card() {  Name = "Tet_card", Description = "new test card 4", TaskList = taskList3 };
+                Card card1 = new Card() {  Name = "Tet_card", Description = "new test card 1", TaskList = taskList1, Position = 1 };
+                Card card2 = new Card() {  Name = "Tet_card", Description = "new test card 2", TaskList = taskList1, Position = 2 };
+                Card card3 = new Card() {  Name = "Tet_card", Description = "new test card 3", TaskList = taskList2, Position = 3 };
+                Card card4 = new Card() {  Name = "Tet_card", Description = "new test card 4", TaskList = taskList3, Position = 4 };
 
                 taskList1.Cards.AddRange(new List<Card> { card1, card2 });
                 taskList2.Cards.Add(card3);
@@ -60,9 +60,9 @@ namespace ProjectManager.BLL.Service
                 Database.Cards.Create(card4);
                 Database.Save();
 
-                return new OperationDetails(true, "Регистрация успешно пройдена", "");
+                return new OperationDetails(true, "Registration successful", "");
             }
-            else  return new OperationDetails(false, "Пользователь с таким логином уже существует", "Login");
+            else  return new OperationDetails(false, "User with such login already exists", "Login");
             
         }
 

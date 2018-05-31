@@ -22,7 +22,7 @@ namespace ProjectManager.DAL.Repositories
 
         public virtual IQueryable<TaskList> GetAll() => Database.TaskList.ToList().AsQueryable<TaskList>();
 
-        public virtual TaskList Get(int Id) => Database.TaskList.Find(Id);
+        public virtual TaskList Get(int Id) => Database.TaskList.AsNoTracking().Include(c => c.Cards).FirstOrDefault(b => b.Id == Id);
 
         public virtual void Create(TaskList item)
         {

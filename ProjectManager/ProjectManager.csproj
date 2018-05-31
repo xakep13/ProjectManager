@@ -214,6 +214,7 @@
     </Compile>
     <Compile Include="Models\BoardViewModel.cs" />
     <Compile Include="Models\CardViewModel.cs" />
+    <Compile Include="Models\JsonObj.cs" />
     <Compile Include="Models\TaskListViewModel.cs" />
     <Compile Include="Models\UserLoginViewModel.cs" />
     <Compile Include="Models\UserRegistrationViewModel.cs" />
@@ -414,7 +415,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>25662</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
